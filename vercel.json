@@ -5,6 +5,9 @@
   "trailingSlash": false,
   "cleanUrls": true,
   "functions": {
+    "api/*.js": {
+      "maxDuration": 10
+    },
     "api/**/*.js": {
       "maxDuration": 10
     }
