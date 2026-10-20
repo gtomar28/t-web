@@ -1,0 +1,4 @@
+Contact: mailto:contact@trevyk.com
+Contact: mailto:support@kiduart.com
+Preferred-Languages: en, hi
+Canonical: https://www.trevyk.in/

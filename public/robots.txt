@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.trevyk.in/sitemap.xml
+
+# Canonical host is https://www.trevyk.in (apex trevyk.in should 301 here).

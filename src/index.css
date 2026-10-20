@@ -1,0 +1,310 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-bg-primary: #2a1830;
+    --color-bg-darker: #1e1024;
+    --color-bg-ink: #160a1c;
+    --color-brand-purple: #6b4a87;
+    --color-brand-lavender: #b9a6d1;
+    --color-brand-lilac: #e7e1f0;
+    --color-brand-pink: #e8a9c2;
+    --color-text-light: #f8f6fb;
+    --color-text-ink: #241428;
+    --surface-ink: rgba(22, 10, 28, 0.72);
+    --surface-lilac: rgba(231, 225, 240, 0.08);
+    --surface-pink: rgba(232, 169, 194, 0.1);
+  }
+
+  body {
+    background-color: #2a1830;
+    background-image:
+      radial-gradient(
+        ellipse 80% 50% at 20% 0%,
+        rgba(107, 74, 135, 0.22),
+        transparent 55%
+      ),
+      radial-gradient(
+        ellipse 60% 40% at 90% 10%,
+        rgba(232, 169, 194, 0.08),
+        transparent 50%
+      );
+    background-attachment: scroll;
+    color: #f8f6fb;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-heading {
+    font-family: "Space Grotesk", sans-serif;
+  }
+
+  .font-mono-accent {
+    font-family: "JetBrains Mono", monospace;
+  }
+}
+
+/* Custom noise grain background */
+.bg-noise {
+  background-image: radial-gradient(
+    rgba(232, 169, 194, 0.04) 1px,
+    transparent 0
+  );
+  background-size: 28px 28px;
+}
+
+/* Ambient gradient mesh */
+.ambient-gradient-glow {
+  background: radial-gradient(
+    circle at 50% 40%,
+    rgba(107, 74, 135, 0.35) 0%,
+    rgba(42, 24, 48, 0.8) 55%,
+    rgba(30, 16, 36, 1) 100%
+  );
+}
+
+/* Color-rhythm surface utilities  break single-plum panels */
+.surface-ink {
+  background: linear-gradient(
+    165deg,
+    rgba(22, 10, 28, 0.95),
+    rgba(30, 16, 36, 0.92)
+  );
+  border-color: rgba(185, 166, 209, 0.28);
+}
+
+.surface-lilac-mist {
+  background: linear-gradient(
+    165deg,
+    rgba(42, 24, 48, 0.9),
+    rgba(231, 225, 240, 0.06)
+  );
+  border-color: rgba(231, 225, 240, 0.22);
+}
+
+.surface-pink-wash {
+  background: linear-gradient(
+    165deg,
+    rgba(42, 24, 48, 0.92),
+    rgba(232, 169, 194, 0.08)
+  );
+  border-color: rgba(232, 169, 194, 0.32);
+}
+
+.glow-pill {
+  box-shadow: 0 0 35px -5px rgba(232, 169, 194, 0.25);
+}
+
+.glow-cube {
+  filter: drop-shadow(0 20px 30px rgba(107, 74, 135, 0.4));
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #1e1024;
+}
+::-webkit-scrollbar-thumb {
+  background: #6b4a87;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #b9a6d1;
+}
+
+/* For custom cursor support */
+@media (pointer: fine) {
+  body.custom-cursor-active {
+    cursor: none;
+  }
+  body.custom-cursor-active a,
+  body.custom-cursor-active button,
+  body.custom-cursor-active input,
+  body.custom-cursor-active select,
+  body.custom-cursor-active [role="button"],
+  body.custom-cursor-active .interactive-target {
+    cursor: none !important;
+  }
+}
+
+/* Subtle keyframe animations */
+@keyframes subtle-float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+
+.animate-subtle-float {
+  animation: subtle-float 6s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 0.75;
+    transform: scale(1);
+    box-shadow: 0 0 12px rgba(232, 169, 194, 0.55);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+    box-shadow: 0 0 20px rgba(232, 169, 194, 0.9);
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-subtle-float,
+  .animate-pulse-soft {
+    animation: none !important;
+  }
+}
+
+/* Maansuk / plum home + footer (ported from maansuk-web) */
+:root {
+  --plum-primary: #512749;
+  --plum-secondary: #85627e;
+  --plum-lavender: #b397ae;
+  --plum-accent: #f6cdce;
+  --plum-neutral: #faf7f8;
+  --background: #1a0f18;
+  --background-elevated: #251422;
+  --foreground: var(--plum-neutral);
+  --muted: var(--plum-lavender);
+  --border: color-mix(in srgb, var(--plum-lavender) 35%, transparent);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-plum: var(--plum-primary);
+  --color-plum-primary: var(--plum-primary);
+  --color-plum-secondary: var(--plum-secondary);
+  --color-plum-lavender: var(--plum-lavender);
+  --color-plum-accent: var(--plum-accent);
+  --color-plum-neutral: var(--plum-neutral);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.grain {
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Home mid band — dark plum + engineering grid (checkbox-style) */
+/* Products & Services — wave fills section width (cover); height = content height only */
+.home-products-services-band {
+  position: relative;
+  isolation: isolate;
+}
+
+.home-products-services-band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-color: #120818;
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(22, 10, 28, 0.68) 0%,
+      rgba(22, 10, 28, 0.32) 18%,
+      rgba(22, 10, 28, 0.14) 50%,
+      rgba(22, 10, 28, 0.45) 88%,
+      rgba(22, 10, 28, 0.78) 100%
+    ),
+    url("/Futuristic%20Purple%20Wave%20Background.png");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.home-mid-atmosphere {
+  background-color: var(--background);
+  background-image:
+    linear-gradient(
+      rgba(185, 166, 209, 0.085) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(185, 166, 209, 0.085) 1px,
+      transparent 1px
+    ),
+    radial-gradient(
+      ellipse 70% 45% at 18% 8%,
+      rgba(107, 74, 135, 0.2),
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 55% 40% at 88% 22%,
+      rgba(232, 169, 194, 0.07),
+      transparent 55%
+    ),
+    linear-gradient(
+      180deg,
+      #160a1c 0%,
+      #1a0f18 35%,
+      #1e1024 100%
+    );
+  background-size: 32px 32px, 32px 32px, 100% 100%, 100% 100%, 100% 100%;
+}
+
+/* Growth offer — card image wells: mid plum (section band stays dark) */
+.growth-card-photo {
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--plum-lavender) 72%, #5c4658) 0%,
+    color-mix(in srgb, var(--plum-secondary) 85%, #4a3848) 48%,
+    color-mix(in srgb, var(--plum-primary) 55%, #3d2e3a) 100%
+  );
+}
+
+.growth-card-photo__img {
+  filter: brightness(1.04) contrast(1.02) saturate(0.9);
+}
+
+.growth-card-photo__edge {
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, #1a0f18 28%, transparent),
+    color-mix(in srgb, var(--plum-secondary) 8%, transparent) 35%,
+    transparent 55%
+  );
+}

@@ -1,0 +1,25 @@
+# Trevyk Technologies
+
+> Trevyk Technologies, Noida. Custom websites, web applications, custom software, SEO, digital marketing, social media, video, and scripts for startups and local businesses. Kiduart School ERP is the flagship product.
+
+## Site
+
+- [Home](https://www.trevyk.in/)
+- [Kiduart](https://www.trevyk.in/kiduart)
+- [Services](https://www.trevyk.in/services)
+- [Technology](https://www.trevyk.in/technology)
+- [About](https://www.trevyk.in/about)
+- [Process](https://www.trevyk.in/process)
+- [Contact](https://www.trevyk.in/contact)
+- [Site map](https://www.trevyk.in/sitemap)
+- [Custom websites](https://www.trevyk.in/work/custom-websites)
+- [Web applications](https://www.trevyk.in/work/web-applications)
+- [SEO](https://www.trevyk.in/work/seo)
+- [Digital marketing](https://www.trevyk.in/work/digital-marketing)
+- [Social media](https://www.trevyk.in/work/social-media)
+- [Video and scripts](https://www.trevyk.in/work/video-scripts)
+
+## Optional
+
+- [Sitemap](https://www.trevyk.in/sitemap.xml)
+- [Robots](https://www.trevyk.in/robots.txt)
