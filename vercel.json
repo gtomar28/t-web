@@ -1,5 +1,6 @@
 {
-  "buildCommand": "npm run build",
+  "installCommand": "npm ci",
+  "buildCommand": "NODE_OPTIONS=--max-old-space-size=8192 npm run build:site",
   "outputDirectory": "dist",
   "trailingSlash": false,
   "cleanUrls": true,
