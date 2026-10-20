@@ -66,6 +66,7 @@ export const KiduartTeaser: React.FC<KiduartTeaserProps> = ({ settings }) => {
             <span>Live product desk · kiduart.com</span>
           </div>
         </ScrollReveal>
+        {/*  */}
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:items-start">
 
@@ -79,7 +80,7 @@ export const KiduartTeaser: React.FC<KiduartTeaserProps> = ({ settings }) => {
               className="w-full"
             />
           </ScrollReveal>
-          
+
           <ScrollReveal
             className="lg:col-span-7 lg:self-start"
             reducedMotion={settings.reducedMotion}
