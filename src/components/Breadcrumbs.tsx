@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ChevronRight, Home } from "lucide-react";
 import { buildBreadcrumbItems } from "../config/seo";
+import { beginRouteTransition } from "../utils/routeTransitionOverlay";
 
 /**
  * Fixed under navbar  high-contrast so it stays readable on all pages.
@@ -42,6 +43,7 @@ export const Breadcrumbs: React.FC<{ className?: string }> = ({
                   ) : (
                     <Link
                       to={item.path}
+                      onClick={() => beginRouteTransition()}
                       className="inline-flex items-center gap-1 text-[#F8F6FB]/90 hover:text-[#E8A9C2] transition-colors"
                     >
                       {index === 0 ? (

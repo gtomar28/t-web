@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useLayoutEffect, useRef, useCallback, Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import { SiteSettings } from './types';
-import { Preloader } from './components/Preloader';
 import { Cursor } from './components/Cursor';
 import { Navbar } from './components/Navbar';
 import { SolarFooterStage } from './components/plum/sections/SolarFooterStage';
@@ -18,44 +17,14 @@ import { SEOManager } from './components/SEOManager';
 import { Analytics } from './components/Analytics';
 import { Breadcrumbs } from './components/Breadcrumbs';
 import { PageTransition } from './components/PageTransition';
+import { AppRoutes } from './components/AppRoutes';
 import { RouteLoader } from './components/RouteLoader';
-
-// Keep home eager for LCP; lazy-load the rest + heavy 3D shell
-import { HomePage } from './pages/HomePage';
+import { useRouteTransitionOverlay } from './hooks/useRouteTransitionOverlay';
 import { trackChatOpen } from './utils/analytics';
+import { setRouteOverlayPathname } from './utils/routeTransitionOverlay';
 
 const Global3DCanvas = lazy(() =>
   import('./components/3d/Global3DCanvas').then((m) => ({ default: m.Global3DCanvas })),
-);
-const ServicesPage = lazy(() =>
-  import('./pages/ServicesPage').then((m) => ({ default: m.ServicesPage })),
-);
-const TechnologyPage = lazy(() =>
-  import('./pages/TechnologyPage').then((m) => ({ default: m.TechnologyPage })),
-);
-const KiduartPage = lazy(() =>
-  import('./pages/KiduartPage').then((m) => ({ default: m.KiduartPage })),
-);
-const ProcessPage = lazy(() =>
-  import('./pages/ProcessPage').then((m) => ({ default: m.ProcessPage })),
-);
-const AboutPage = lazy(() =>
-  import('./pages/AboutPage').then((m) => ({ default: m.AboutPage })),
-);
-const ContactPage = lazy(() =>
-  import('./pages/ContactPage').then((m) => ({ default: m.ContactPage })),
-);
-const GuidePage = lazy(() =>
-  import('./pages/GuidePage').then((m) => ({ default: m.GuidePage })),
-);
-const AiPage = lazy(() =>
-  import('./pages/AiPage').then((m) => ({ default: m.AiPage })),
-);
-const SitemapPage = lazy(() =>
-  import('./pages/SitemapPage').then((m) => ({ default: m.SitemapPage })),
-);
-const NotFoundPage = lazy(() =>
-  import('./pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })),
 );
 
 // Register GSAP plugins
@@ -83,9 +52,22 @@ function ScrollToTop({ lenisRef }: { lenisRef: React.RefObject<Lenis | null> }) 
 }
 
 function MainAppContent() {
-  // HTML #trevyk-boot already covers first paint. Skip the second cinematic
-  // overlay so LCP is the real page, not a delayed preloader animation.
-  const [loading, setLoading] = useState(false);
+  const location = useLocation();
+  const pathname = location.pathname;
+  const { overlayVisible } = useRouteTransitionOverlay(pathname);
+
+  useLayoutEffect(() => {
+    setRouteOverlayPathname(pathname);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (overlayVisible) {
+      setScene3dEnabled(false);
+      return;
+    }
+    const t = window.setTimeout(() => setScene3dEnabled(true), 480);
+    return () => window.clearTimeout(t);
+  }, [overlayVisible]);
   const [settings, setSettings] = useState<SiteSettings>({
     reducedMotion: false,
     highQuality3D: true,
@@ -100,9 +82,9 @@ function MainAppContent() {
   const [selectedCubeIndex, setSelectedCubeIndex] = useState<number | null>(null);
   const [hoveredCube, setHoveredCube] = useState<number | null>(null);
 
-  const location = useLocation();
   const lenisRef = useRef<Lenis | null>(null);
   const [mount3d, setMount3d] = useState(false);
+  const [scene3dEnabled, setScene3dEnabled] = useState(false);
 
   const openChatWithPrompt = (prompt?: string) => {
     setChatInitialPrompt(prompt);
@@ -205,10 +187,6 @@ function MainAppContent() {
     }
   }, [chatOpen]);
 
-  const handlePreloaderComplete = useCallback(() => {
-    setLoading(false);
-  }, []);
-
   // Normalized mouse coordinates (-1 to 1) for 3D parallax
   const handleMouseMove = useCallback((e: MouseEvent) => {
     const x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -231,22 +209,19 @@ function MainAppContent() {
       <SEOManager />
       <Analytics />
 
-      {/* 1. Global Recurring Brand Device: Pinned Top Gradient Bar (4-5px) */}
-      <BrandGradientBar height={5} pinnedTop={true} shimmer={true} />
-
-      {/* 2. Global Custom Cursor */}
-      <Cursor reducedMotion={settings.reducedMotion} />
-
-      {/* 3. Cinematic Preloader with real loading & shattering wipe */}
-      {loading && (
-        <Preloader
-          onComplete={handlePreloaderComplete}
-          reducedMotion={settings.reducedMotion}
-        />
+      {!overlayVisible && (
+        <BrandGradientBar height={5} pinnedTop={true} shimmer={true} />
       )}
 
-      {/* 4. Global Persistent 3D WebGL Canvas (lazy — keeps first paint light) */}
-      {mount3d && (
+      {!overlayVisible && <Cursor reducedMotion={settings.reducedMotion} />}
+
+      <RouteLoader
+        visible={overlayVisible}
+        reducedMotion={settings.reducedMotion}
+      />
+
+      {/* WebGL companion — hidden during route loader (not the logo MP4) */}
+      {mount3d && scene3dEnabled && !overlayVisible && (
       <Suspense fallback={null}>
         <Global3DCanvas
           scrollProgress={scrollProgress}
@@ -254,90 +229,41 @@ function MainAppContent() {
           settings={settings}
           hoveredCube={hoveredCube}
           onCubeHover={setHoveredCube}
-          currentPath={location.pathname}
+          currentPath={pathname}
         />
       </Suspense>
       )}
 
-      <RouteLoader reducedMotion={settings.reducedMotion} />
+      {!overlayVisible && (
+        <Navbar
+          settings={settings}
+          onUpdateSettings={updateSettings}
+          onOpenArchitectureModal={() => handleOpenArchitectureModal(null)}
+        />
+      )}
 
-      {/* 5. Persistent Multi-Page Navigation */}
-      <Navbar
-        settings={settings}
-        onUpdateSettings={updateSettings}
-        onOpenArchitectureModal={() => handleOpenArchitectureModal(null)}
-      />
-
-      {/* 6. Multi-Page Routes with Smooth Transition Animations */}
-      <main id="main-content" className="relative z-10 min-h-screen">
+      <main
+        id="main-content"
+        className={`relative z-10 min-h-screen${overlayVisible ? " invisible" : ""}`}
+        aria-hidden={overlayVisible}
+      >
         <Breadcrumbs />
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="sync">
           <PageTransition
-            key={location.pathname}
-            pathname={location.pathname}
+            key={pathname}
+            pathname={pathname}
             reducedMotion={settings.reducedMotion}
           >
-            <Suspense fallback={<div className="min-h-screen" aria-hidden />}>
-              <Routes location={location}>
-                <Route
-                  path="/"
-                  element={
-                    <HomePage
-                      settings={settings}
-                      scrollProgress={scrollProgress}
-                      mousePos={mousePos}
-                      onOpenArchitectureModal={handleOpenArchitectureModal}
-                      hoveredCube={hoveredCube}
-                      onCubeHover={setHoveredCube}
-                    />
-                  }
-                />
-                <Route
-                  path="/services"
-                  element={
-                    <ServicesPage
-                      settings={settings}
-                      onOpenArchitectureModal={() => handleOpenArchitectureModal(null)}
-                    />
-                  }
-                />
-                <Route
-                  path="/technology"
-                  element={
-                    <TechnologyPage
-                      settings={settings}
-                      onOpenArchitectureModal={handleOpenArchitectureModal}
-                      hoveredCube={hoveredCube}
-                      onCubeHover={setHoveredCube}
-                    />
-                  }
-                />
-                <Route
-                  path="/kiduart"
-                  element={<KiduartPage settings={settings} />}
-                />
-                <Route
-                  path="/process"
-                  element={<ProcessPage settings={settings} />}
-                />
-                <Route
-                  path="/about"
-                  element={
-                    <AboutPage
-                      settings={settings}
-                      onOpenArchitectureModal={() => handleOpenArchitectureModal(null)}
-                    />
-                  }
-                />
-                <Route
-                  path="/contact"
-                  element={<ContactPage settings={settings} />}
-                />
-                <Route path="/ai" element={<AiPage />} />
-                <Route path="/sitemap" element={<SitemapPage />} />
-                <Route path="/work/:slug" element={<GuidePage />} />
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
+            <Suspense fallback={null}>
+              <AppRoutes
+                location={location}
+                settings={settings}
+                scrollProgress={scrollProgress}
+                mousePos={mousePos}
+                onOpenArchitectureModal={handleOpenArchitectureModal}
+                hoveredCube={hoveredCube}
+                onCubeHover={setHoveredCube}
+              />
             </Suspense>
           </PageTransition>
         </AnimatePresence>

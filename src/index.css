@@ -308,3 +308,62 @@
     transparent 55%
   );
 }
+
+/* Route-change logo loader: gentle center zoom while visible */
+@keyframes entry-loader-video-zoom {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.05);
+  }
+  72% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1.14);
+  }
+}
+
+.entry-loader-video {
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.entry-loader-video--active {
+  animation-name: entry-loader-video-zoom;
+  animation-timing-function: cubic-bezier(0.28, 0.85, 0.35, 1);
+  animation-fill-mode: forwards;
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    105deg,
+    color-mix(in srgb, #6b4a87 22%, #2a1830) 0%,
+    color-mix(in srgb, #b9a6d1 18%, #3d2548) 45%,
+    color-mix(in srgb, #6b4a87 22%, #2a1830) 90%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer-move 1.35s ease-in-out infinite;
+}
+
+.skeleton-shimmer-faint {
+  background: linear-gradient(
+    105deg,
+    color-mix(in srgb, #6b4a87 8%, #2a1830) 0%,
+    color-mix(in srgb, #6b4a87 14%, #2f1a36) 48%,
+    color-mix(in srgb, #6b4a87 8%, #2a1830) 92%
+  );
+  background-size: 220% 100%;
+  animation: skeleton-shimmer-move 2.1s ease-in-out infinite;
+  opacity: 0.55;
+}
+
+@keyframes skeleton-shimmer-move {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}

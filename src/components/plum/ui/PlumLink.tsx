@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { isExternalPlumHref, resolvePlumHref } from "../../../lib/plumRoutes";
+import { beginRouteTransition } from "../../../utils/routeTransitionOverlay";
 
 type PlumLinkProps = {
   href: string;
@@ -23,7 +24,11 @@ export function PlumLink({ href, className, children }: PlumLinkProps) {
     );
   }
   return (
-    <Link to={resolvePlumHref(href)} className={className}>
+    <Link
+      to={resolvePlumHref(href)}
+      className={className}
+      onClick={() => beginRouteTransition()}
+    >
       {children}
     </Link>
   );

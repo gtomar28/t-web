@@ -87,12 +87,15 @@ export function ScrollScrubVideo({
             muted
             playsInline
             preload="auto"
+            // @ts-expect-error React 19 fetchPriority on media
+            fetchPriority="high"
             loop={loop}
             aria-label={label}
             onLoadedMetadata={() => {
               setReady(true);
               syncTime(progress);
             }}
+            onCanPlay={() => setReady(true)}
             onError={() => setMissing(true)}
           />
         </div>

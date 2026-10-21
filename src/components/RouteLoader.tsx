@@ -1,59 +1,97 @@
-import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { AnimatePresence, motion } from "motion/react";
-import { TrevykLogo } from "./TrevykLogo";
-import { peekEntryHandoff } from "../utils/entryHandoff";
+import React, { useEffect, useRef } from "react";
+import { entryLoader, media } from "../config/media";
+import { ROUTE_LOADER_ID } from "../utils/routeTransitionOverlay";
 
 interface RouteLoaderProps {
+  visible: boolean;
   reducedMotion?: boolean;
 }
 
-/**
- * Brief brand-core veil on route change.
- * Skips first paint and preloader→home entry handoff.
- */
+function applyLoaderVideoSettings(video: HTMLVideoElement, restart: boolean) {
+  video.playbackRate = Math.max(2, entryLoader.playbackRate);
+  if (restart) {
+    try {
+      video.currentTime = 0;
+    } catch {
+      /* ignore */
+    }
+  }
+  video.play().catch(() => {});
+}
+
+function restartZoomAnimation(video: HTMLVideoElement) {
+  video.classList.remove("entry-loader-video--active");
+  void video.offsetWidth;
+  video.classList.add("entry-loader-video--active");
+}
+
 export const RouteLoader: React.FC<RouteLoaderProps> = ({
+  visible,
   reducedMotion = false,
 }) => {
-  const { pathname } = useLocation();
-  const [show, setShow] = useState(false);
-  const [armed, setArmed] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const bg = entryLoader.background;
+  const videoSizePct = `${entryLoader.videoViewportRatio * 100}%`;
 
   useEffect(() => {
-    const t = window.setTimeout(() => setArmed(true), 900);
-    return () => window.clearTimeout(t);
+    const v = videoRef.current;
+    if (!v) return;
+    applyLoaderVideoSettings(v, false);
   }, []);
 
   useEffect(() => {
-    if (!armed || reducedMotion) return;
-    if (peekEntryHandoff()) return;
-    if (pathname === "/" || pathname === "") return;
+    const v = videoRef.current;
+    if (!v || !visible) return;
+    restartZoomAnimation(v);
+    applyLoaderVideoSettings(v, true);
+  }, [visible]);
 
-    setShow(true);
-    const t = window.setTimeout(() => setShow(false), 680);
-    return () => window.clearTimeout(t);
-  }, [pathname, reducedMotion, armed]);
+  if (reducedMotion) {
+    return (
+      <div
+        id={ROUTE_LOADER_ID}
+        className={`fixed inset-0 z-[9999] transition-opacity duration-150 ${
+          visible ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        style={{ backgroundColor: bg }}
+        aria-hidden={!visible}
+        aria-busy={visible}
+      />
+    );
+  }
 
   return (
-    <AnimatePresence>
-      {show && (
-        <motion.div
-          key={pathname}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.22 }}
-          className="fixed inset-0 z-[80] pointer-events-none flex items-center justify-center bg-[#160A1C]/72 backdrop-blur-[2px]"
-          aria-hidden
-        >
-          <div className="relative flex flex-col items-center gap-4">
-            <TrevykLogo layout="icon-only" size="md" theme="dark" />
-            <span className="font-mono-accent text-[10px] tracking-[0.3em] text-[#E8A9C2] uppercase">
-              Switching context
-            </span>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <div
+      id={ROUTE_LOADER_ID}
+      className={`fixed inset-0 z-[9999] transition-opacity duration-150 ${
+        visible ? "opacity-100" : "pointer-events-none opacity-0"
+      }`}
+      style={{ backgroundColor: bg }}
+      aria-hidden={!visible}
+      aria-busy={visible}
+      aria-live="polite"
+      aria-label={visible ? "Loading page" : undefined}
+    >
+      <video
+        ref={videoRef}
+        className={`entry-loader-video pointer-events-none absolute inset-0 m-auto object-contain object-center ${
+          visible ? "entry-loader-video--active" : ""
+        }`}
+        style={{
+          backgroundColor: bg,
+          width: videoSizePct,
+          height: videoSizePct,
+          animationDuration: `${entryLoader.zoomDurationMs}ms`,
+        }}
+        src={media.entryLogoAnimation}
+        muted
+        playsInline
+        autoPlay
+        loop
+        preload="auto"
+        // @ts-expect-error React 19 fetchPriority on media
+        fetchPriority="high"
+      />
+    </div>
   );
 };

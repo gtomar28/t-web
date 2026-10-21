@@ -66,6 +66,27 @@
       href="/trevyk-logo-on-dark.png"
       fetchpriority="high"
     />
+    <link
+      rel="preload"
+      href="/images/kiduart/Trevyk_Technologies_logo_animation_1080p_20261020233711.mp4"
+      as="fetch"
+      type="video/mp4"
+    />
+    <!-- Home hero: start downloading before React (same URL as `media.heroOffice`). -->
+    <link
+      rel="preload"
+      href="/videos/hero-office-loop.mp4"
+      as="fetch"
+      type="video/mp4"
+    />
+    <script>
+      (function () {
+        var src = "/videos/hero-office-loop.mp4";
+        try {
+          fetch(src, { priority: "high" });
+        } catch (e) {}
+      })();
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -144,16 +165,7 @@
   <body
     class="bg-[#2A1830] text-[#F8F6FB] antialiased selection:bg-[#E8A9C2] selection:text-[#241428] overflow-x-hidden"
   >
-    <div id="trevyk-boot" aria-busy="true" aria-live="polite" aria-label="Loading Trevyk Technologies">
-      <img
-        src="/trevyk-logo-on-dark.png"
-        width="200"
-        height="48"
-        alt="TREVYK Technologies"
-        decoding="async"
-        fetchpriority="high"
-      />
-    </div>
+    <div id="trevyk-boot" aria-busy="true" aria-live="polite" aria-label="Loading Trevyk Technologies"></div>
     <div id="root">
       <!-- trevyk-static-start -->
       <article class="trevyk-seo-shell">

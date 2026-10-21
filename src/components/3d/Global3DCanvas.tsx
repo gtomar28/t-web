@@ -48,6 +48,11 @@ export const Global3DCanvas: React.FC<Global3DCanvasProps> = ({
   const path = currentPath.toLowerCase();
   const isHome = path === "/" || path === "";
 
+  // Kiduart uses its own art direction — no floating cube companion.
+  if (path.startsWith("/kiduart")) {
+    return null;
+  }
+
   const isLightSection = path.startsWith("/kiduart");
 
   // Hero owns early home interaction  fade global companion in after hero

@@ -23,6 +23,7 @@ import { MagneticButton } from "./MagneticButton";
 import { TrevykLogo } from "./TrevykLogo";
 import { SiteSettings } from "../types";
 import { soundEngine } from "../utils/audioEngine";
+import { beginRouteTransition } from "../utils/routeTransitionOverlay";
 
 interface NavbarProps {
   settings: SiteSettings;
@@ -137,6 +138,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               id="brand-logo-link"
               to="/"
               onClick={() => {
+                beginRouteTransition();
                 soundEngine.playClick("hero");
                 if (mobileMenuOpen) setMobileMenuOpen(false);
               }}
@@ -158,14 +160,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <NavLink
                     key={link.label}
                     to={link.path}
-                    onClick={() => soundEngine.playClick("soft")}
+                    onClick={() => {
+                      beginRouteTransition();
+                      soundEngine.playClick("soft");
+                    }}
                     onMouseEnter={() => soundEngine.playHover()}
                     className={`group relative flex shrink-0 items-center gap-1 rounded-md px-2 py-1.5 text-[11px] font-medium transition-colors xl:gap-1.5 xl:px-2.5 xl:text-[13px] ${
                       isActive
                         ? "text-[#F8F6FB]"
                         : "text-[#E7E1F0]/78 hover:text-[#F8F6FB]"
                     }`}
-                    data-cursor-label={link.label.toUpperCase()}
                   >
                     <span className="relative inline-block pb-1">
                       {link.label}
@@ -359,6 +363,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       <NavLink
                         to={link.path}
                         onClick={() => {
+                          beginRouteTransition();
                           soundEngine.playClick("soft");
                           setMobileMenuOpen(false);
                         }}

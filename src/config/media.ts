@@ -7,6 +7,25 @@ export const media = {
   /** How we work — full-section rotating earth background */
   processGlobe: "/videos/process-globe-bg.mp4",
   footerSolar: "/videos/solar.mp4",
+  /** Full-screen centered loader while the home hero video buffers */
+  entryLogoAnimation:
+    "/images/kiduart/Trevyk_Technologies_logo_animation_1080p_20261020233711.mp4",
+} as const;
+
+/** Route-change logo loader (matches site shell `#2A1830`). */
+export const entryLoader = {
+  background: "#2A1830",
+  /** ≥2× playback on route loader (never slower than 2). */
+  playbackRate: 8,
+  /** Keep loader up at least this long on redirect so logo video can load/play. */
+  minVisibleMs: 1000,
+  /** Logo video box vs full viewport (2/3 = ~67% width/height). */
+  videoViewportRatio: 2 / 3,
+  /** Subtle center zoom while the loader is visible (sync with route overlay min time). */
+  zoomScaleStart: 1,
+  zoomScaleMid: 1.08,
+  zoomScaleEnd: 1.14,
+  zoomDurationMs: 1800,
 } as const;
 
 /**
