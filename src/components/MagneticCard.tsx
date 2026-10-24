@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import React, { useRef } from "react";
+import { useReducedMotion } from "motion/react";
 
 interface MagneticCardProps {
   children: React.ReactNode;
@@ -10,7 +10,7 @@ interface MagneticCardProps {
 }
 
 /**
- * Pointer-follow magnetic tilt for interactive cards / panels.
+ * Pointer-follow tilt — updates transform on the element directly (no React re-render per move).
  */
 export const MagneticCard: React.FC<MagneticCardProps> = ({
   children,
@@ -22,43 +22,38 @@ export const MagneticCard: React.FC<MagneticCardProps> = ({
   const ref = useRef<HTMLDivElement>(null);
   const systemReduced = useReducedMotion();
   const quiet = reducedMotion || systemReduced;
-  const [offset, setOffset] = useState({ x: 0, y: 0, rx: 0, ry: 0 });
 
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (quiet || !ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     const px = (e.clientX - rect.left) / rect.width - 0.5;
     const py = (e.clientY - rect.top) / rect.height - 0.5;
-    setOffset({
-      x: px * strength * 40,
-      y: py * strength * 40,
-      rx: -py * maxTilt,
-      ry: px * maxTilt,
-    });
+    const x = px * strength * 40;
+    const y = py * strength * 40;
+    const rx = -py * maxTilt;
+    const ry = px * maxTilt;
+    ref.current.style.transform = `perspective(900px) translate3d(${x}px, ${y}px, 0) rotateX(${rx}deg) rotateY(${ry}deg)`;
   };
 
-  const onLeave = () => setOffset({ x: 0, y: 0, rx: 0, ry: 0 });
+  const onLeave = () => {
+    if (!ref.current) return;
+    ref.current.style.transform =
+      "perspective(900px) translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg)";
+  };
 
   if (quiet) {
     return <div className={className}>{children}</div>;
   }
 
   return (
-    <motion.div
+    <div
       ref={ref}
       className={className}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      animate={{
-        x: offset.x,
-        y: offset.y,
-        rotateX: offset.rx,
-        rotateY: offset.ry,
-      }}
-      transition={{ type: "spring", stiffness: 260, damping: 22, mass: 0.35 }}
-      style={{ transformPerspective: 900, transformStyle: "preserve-3d" }}
+      style={{ transformStyle: "preserve-3d", willChange: "transform" }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 };

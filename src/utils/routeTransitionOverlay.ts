@@ -5,14 +5,18 @@ import {
   dismissTrevykBoot,
   markHomeHeroVideoWarm,
 } from "./heroVideoPreload";
-import { isHomePath } from "./homeEntryGate";
+import { isHomePath, shouldGateHomeEntry } from "./homeEntryGate";
 
 export const ROUTE_LOADER_ID = "trevyk-route-loader";
 
 type Listener = (visible: boolean) => void;
 
-let visible = true;
-let contentReady = false;
+const skipInitialOverlay =
+  typeof window !== "undefined" &&
+  !shouldGateHomeEntry(window.location.pathname);
+
+let visible = !skipInitialOverlay;
+let contentReady = skipInitialOverlay;
 let shownAt = Date.now();
 let activePathname = "/";
 const listeners = new Set<Listener>();

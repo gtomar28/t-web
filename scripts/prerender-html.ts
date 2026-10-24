@@ -12,10 +12,12 @@ import { GUIDES } from "../src/data/guides";
 import { SERVICES_DATA } from "../src/data/services";
 import {
   breadcrumbJsonLd,
+  faqPageMainEntity,
   getRouteSeo,
   isIndexablePath,
   webPageJsonLd,
 } from "../src/config/seo";
+import { AI_HUB_FAQS } from "../src/data/aiHub";
 import {
   absoluteUrl,
   CANONICAL_SITE_URL,
@@ -204,15 +206,20 @@ function bodyFor(route: string): string {
           .join("")
       : "";
 
+  const faqBlockFrom = (faqs: readonly { question: string; answer: string }[]) =>
+    `<h2>Questions buyers ask</h2>${faqs
+      .map(
+        (faq) =>
+          `<h3>${escapeHtml(faq.question)}</h3><p>${escapeHtml(faq.answer)}</p>`,
+      )
+      .join("")}`;
+
   const faqBlock =
     guide?.faqs && guide.faqs.length > 0
-      ? `<h2>Questions buyers ask</h2>${guide.faqs
-          .map(
-            (faq) =>
-              `<h3>${escapeHtml(faq.question)}</h3><p>${escapeHtml(faq.answer)}</p>`,
-          )
-          .join("")}`
-      : "";
+      ? faqBlockFrom(guide.faqs)
+      : route === "/ai"
+        ? faqBlockFrom(AI_HUB_FAQS)
+        : "";
 
   const extra = guide
     ? `${sectionsBlock}<h2>What you leave with</h2>${textList(guide.points)}${faqBlock}<p><a href="/contact">Start this conversation</a></p><p><a href="/ai">AI solutions hub</a></p>`
@@ -247,6 +254,7 @@ function bodyFor(route: string): string {
         ${copy.paragraphs.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("\n        ")}
         ${extra}
         ${serviceList}
+        ${faqBlock && !guide ? faqBlock : ""}
         ${related.length ? `<h2>Related</h2>${linkList(related)}` : ""}
         <p><a href="${escapeHtml(KIDUART_URL)}">Kiduart</a> · <a href="mailto:contact@trevyk.com">contact@trevyk.com</a></p>
       </article>
@@ -341,21 +349,20 @@ function render(template: string, route: string): string {
     "twitter:image",
   );
 
-  const faqLd =
+  const faqSource =
     guide?.faqs && guide.faqs.length > 0
-      ? jsonScript("ld-faq", {
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: guide.faqs.map((faq) => ({
-            "@type": "Question",
-            name: faq.question,
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: faq.answer,
-            },
-          })),
-        })
-      : "";
+      ? guide.faqs
+      : route === "/ai"
+        ? AI_HUB_FAQS
+        : null;
+
+  const faqLd = faqSource?.length
+    ? jsonScript("ld-faq", {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqPageMainEntity(faqSource),
+      })
+    : "";
 
   const structured = isIndexablePath(route)
     ? [

@@ -13,7 +13,7 @@ import {
   subscribeRouteOverlay,
 } from "../utils/routeTransitionOverlay";
 
-const MAX_WAIT_MS = 20000;
+const MAX_WAIT_MS = 3500;
 
 export function useRouteTransitionOverlay(pathname: string) {
   const overlayVisible = useSyncExternalStore(

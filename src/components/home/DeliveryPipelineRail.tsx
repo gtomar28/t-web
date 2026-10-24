@@ -82,7 +82,7 @@ function PipelineGlassNode({
         />
         <Icon
           className={`relative z-10 h-4 w-4 sm:h-[1.125rem] sm:w-[1.125rem] ${
-            active ? "text-[#FFF6FB]" : "text-[#FFF6FB]"
+            active ? "text-[#FFF6FB]" : "text-[#F8F6FB]"
           }`}
           aria-hidden
         />

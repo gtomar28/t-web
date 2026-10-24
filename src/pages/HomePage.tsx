@@ -11,8 +11,6 @@ import { HomeMidBand } from "../components/home/HomeMidBand";
 
 interface HomePageProps {
   settings: SiteSettings;
-  scrollProgress: number;
-  mousePos: { x: number; y: number };
   onOpenArchitectureModal: (index?: number | null) => void;
   hoveredCube: number | null;
   onCubeHover: (index: number | null) => void;
@@ -20,8 +18,6 @@ interface HomePageProps {
 
 export const HomePage: React.FC<HomePageProps> = ({
   settings,
-  scrollProgress,
-  mousePos,
   onOpenArchitectureModal,
   hoveredCube,
   onCubeHover,

@@ -88,9 +88,7 @@ export const RouteLoader: React.FC<RouteLoaderProps> = ({
         playsInline
         autoPlay
         loop
-        preload="auto"
-        // @ts-expect-error fetchPriority on media
-        fetchPriority="high"
+        preload={visible ? "auto" : "metadata"}
       />
     </div>
   );

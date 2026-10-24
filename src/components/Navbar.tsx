@@ -22,6 +22,7 @@ import { TrevykLogo } from "./TrevykLogo";
 import { SiteSettings } from "../types";
 import { soundEngine } from "../utils/audioEngine";
 import { beginRouteTransition } from "../utils/routeTransitionOverlay";
+import { prefetchRoute } from "../utils/routePrefetch";
 
 interface NavbarProps {
   settings: SiteSettings;
@@ -92,6 +93,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const navLinks: MainNavLink[] = [
     { label: "Who we are", path: "/who-we-are", icon: Info },
     { label: "What we do", path: "/what-we-do", icon: Cpu },
+    { label: "AI", path: "/ai", icon: MessageSquareCode },
     {
       label: "Our Products",
       path: "/our-products",
@@ -162,7 +164,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                       beginRouteTransition();
                       soundEngine.playClick("soft");
                     }}
-                    onMouseEnter={() => soundEngine.playHover()}
+                    onMouseEnter={() => {
+                      prefetchRoute(link.path);
+                      soundEngine.playHover();
+                    }}
                     className={`group relative flex shrink-0 items-center gap-1 rounded-md px-2 py-1.5 text-[11px] font-medium transition-colors xl:gap-1.5 xl:px-2.5 xl:text-[13px] ${
                       isActive
                         ? "text-[#F8F6FB]"
@@ -339,6 +344,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                     >
                       <NavLink
                         to={link.path}
+                        onMouseEnter={() => prefetchRoute(link.path)}
+                        onFocus={() => prefetchRoute(link.path)}
                         onClick={() => {
                           beginRouteTransition();
                           soundEngine.playClick("soft");

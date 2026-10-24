@@ -63,8 +63,6 @@ const HomePageReady = withRouteReady(HomePage);
 type Props = {
   location: Location;
   settings: SiteSettings;
-  scrollProgress: number;
-  mousePos: { x: number; y: number };
   onOpenArchitectureModal: (index?: number | null) => void;
   hoveredCube: number | null;
   onCubeHover: (index: number | null) => void;
@@ -73,8 +71,6 @@ type Props = {
 export function AppRoutes({
   location,
   settings,
-  scrollProgress,
-  mousePos,
   onOpenArchitectureModal,
   hoveredCube,
   onCubeHover,
@@ -86,8 +82,6 @@ export function AppRoutes({
         element={
           <HomePageReady
             settings={settings}
-            scrollProgress={scrollProgress}
-            mousePos={mousePos}
             onOpenArchitectureModal={onOpenArchitectureModal}
             hoveredCube={hoveredCube}
             onCubeHover={onCubeHover}

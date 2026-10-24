@@ -12,7 +12,12 @@ type ScrollScrubVideoProps = {
   zoom?: number;
   zoomOrigin?: string;
   objectPosition?: string;
+  /** Fallback poster on the video element (non-LCP sections). */
   poster?: string;
+  /** High-priority still for LCP; video fades in after `canplay`. */
+  staticLcpPoster?: string;
+  staticLcpSrcSet?: string;
+  staticLcpSizes?: string;
   label?: string;
 };
 
@@ -28,13 +33,18 @@ export function ScrollScrubVideo({
   zoomOrigin = "50% 50%",
   objectPosition = "50% 50%",
   poster,
+  staticLcpPoster,
+  staticLcpSrcSet,
+  staticLcpSizes = "100vw",
   label = "Section animation",
 }: ScrollScrubVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [ready, setReady] = useState(false);
+  const [videoVisible, setVideoVisible] = useState(false);
   const [missing, setMissing] = useState(false);
 
   const scale = zoom ?? lerp(zoomMin, zoomMax, progress);
+  const useStaticLcp = Boolean(staticLcpPoster);
 
   const syncTime = useCallback(
     (p: number) => {
@@ -72,36 +82,65 @@ export function ScrollScrubVideo({
     <div className={`overflow-hidden ${className || "relative h-full w-full"}`}>
       {!missing ? (
         <div
-          className="h-full w-full will-change-transform"
+          className="relative h-full w-full will-change-transform"
           style={{
             transform: `scale(${scale})`,
             transformOrigin: zoomOrigin,
           }}
         >
+          {useStaticLcp ? (
+            <img
+              src={staticLcpPoster}
+              srcSet={staticLcpSrcSet}
+              sizes={staticLcpSizes}
+              alt=""
+              decoding="async"
+              loading="eager"
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
+                videoVisible ? "opacity-0" : "opacity-100"
+              }`}
+              style={{ objectPosition }}
+              // @ts-expect-error fetchPriority on img
+              fetchPriority="high"
+            />
+          ) : null}
           <video
             ref={videoRef}
-            className="h-full w-full object-cover"
+            className={`h-full w-full object-cover transition-opacity duration-700 ${
+              useStaticLcp && !videoVisible ? "opacity-0" : "opacity-100"
+            }`}
             style={{ objectPosition }}
             src={src}
-            poster={poster}
+            poster={useStaticLcp ? undefined : poster}
             muted
             playsInline
-            preload="auto"
-            // @ts-expect-error React 19 fetchPriority on media
-            fetchPriority="high"
+            preload={scrub ? "auto" : "metadata"}
             loop={loop}
             aria-label={label}
             onLoadedMetadata={() => {
               setReady(true);
               syncTime(progress);
             }}
-            onCanPlay={() => setReady(true)}
+            onCanPlay={() => {
+              setReady(true);
+              setVideoVisible(true);
+            }}
             onError={() => setMissing(true)}
           />
         </div>
       ) : (
         <div className="flex h-full w-full items-center justify-center bg-[#0f0810] p-6 text-center">
-          <p className="font-mono text-xs leading-relaxed text-plum-lavender">
+          {staticLcpPoster ? (
+            <img
+              src={staticLcpPoster}
+              srcSet={staticLcpSrcSet}
+              sizes={staticLcpSizes}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover"
+              style={{ objectPosition }}
+            />
+          ) : null}
+          <p className="relative font-mono text-xs leading-relaxed text-plum-lavender">
             Add <span className="text-plum-accent">{src.replace("/videos/", "")}</span> under{" "}
             <span className="text-plum-neutral">public/videos/</span>
           </p>

@@ -133,7 +133,6 @@ const ROUTE_SOCIAL_IMAGES: Record<string, string> = {
   "/technology": "/images/technology/hero-backdrop.jpg",
   "/process": "/images/studio-process.jpg",
   "/who-we-are": "/images/studio-about.jpg",
-  "/contact": "/images/studio-contact.jpg",
   "/our-products": "/images/studio-kiduart.jpg",
 };
 
@@ -191,6 +190,20 @@ export function breadcrumbJsonLd(pathname: string) {
       item: absoluteUrl(item.path),
     })),
   };
+}
+
+/** FAQPage `mainEntity` — keep JSON-LD aligned with visible FAQ copy. */
+export function faqPageMainEntity(
+  faqs: readonly { question: string; answer: string }[],
+) {
+  return faqs.map((faq) => ({
+    "@type": "Question" as const,
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer" as const,
+      text: faq.answer,
+    },
+  }));
 }
 
 export function webPageJsonLd(pathname: string) {

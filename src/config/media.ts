@@ -3,6 +3,9 @@ export const media = {
   /** Hero — office background (home) */
   heroOffice: "/videos/hero-office-loop.mp4",
   heroOfficeReverse: "/videos/hero-office-reverse.mp4",
+  /** LCP still — extracted from hero video; video loads after first paint. */
+  heroOfficePoster: "/images/hero-office-poster.jpg",
+  heroOfficePoster640: "/images/hero-office-poster-640.jpg",
   /** How we work — full-section rotating earth background */
   processGlobe: "/videos/process-globe-bg.mp4",
   footerSolar: "/videos/solar.mp4",
@@ -15,7 +18,7 @@ export const media = {
 export const entryLoader = {
   background: "#2A1830",
   playbackRate: 8,
-  minVisibleMs: 420,
+  minVisibleMs: 280,
   videoViewportRatio: 2 / 3,
   zoomScaleStart: 1,
   zoomScaleEnd: 1.14,

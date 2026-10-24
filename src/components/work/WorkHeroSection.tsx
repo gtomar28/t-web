@@ -19,8 +19,9 @@ export function WorkHeroSection({
   primaryCta,
   secondaryCta,
   backdropImage,
+  backdropAlt = "",
   objectPosition = "70% center",
-}: Props) {
+}: Props & { backdropAlt?: string }) {
   return (
     <section
       id="work-hero"
@@ -30,7 +31,7 @@ export function WorkHeroSection({
       <div className="pointer-events-none absolute inset-0" aria-hidden>
         <img
           src={backdropImage}
-          alt=""
+          alt={backdropAlt}
           className="absolute inset-0 h-full w-full object-cover"
           style={{ objectPosition }}
           fetchPriority="high"

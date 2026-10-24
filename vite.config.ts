@@ -32,6 +32,15 @@ export default defineConfig(() => {
             if (id.includes('motion') || id.includes('framer-motion')) {
               return 'motion-vendor';
             }
+            if (id.includes('/gsap/') || id.includes('gsap')) {
+              return 'gsap-vendor';
+            }
+            if (id.includes('lenis')) {
+              return 'scroll-vendor';
+            }
+            if (id.includes('@google/genai') || id.includes('/genai')) {
+              return 'genai-vendor';
+            }
           },
         },
       },
