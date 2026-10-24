@@ -54,11 +54,11 @@ function PipelineGlassNode({
 }) {
   const glassIcon = active
     ? "border-[#E8A9C2]/75 bg-[#2A1830] shadow-[inset_0_1px_0_rgba(248,246,251,0.22),0_0_32px_rgba(232,169,194,0.55),0_0_64px_rgba(232,169,194,0.28),0_0_96px_rgba(185,166,209,0.18)] ring-1 ring-[#E8A9C2]/30"
-    : "border-[#B9A6D1]/45 bg-[#ac98be] shadow-[inset_0_1px_0_rgba(248,246,251,0.12)] ring-1 ring-[#F8F6FB]/5";
+    : "border-[#E8A9C2]/45 bg-[#2A1830] shadow-[inset_0_1px_0_rgba(248,246,251,0.12)] ring-1 ring-[#F8F6FB]/5";
 
   const glassPlate = active
-    ? "border-[#E8A9C2]/50 bg-[#6B4A89] shadow-[inset_0_1px_0_rgba(248,246,251,0.14)] ring-1 ring-[#E8A9C2]/15"
-    : "border-[#B9A6D1]/40 bg-[#ac98be] shadow-[inset_0_1px_0_rgba(248,246,251,0.1)] ring-1 ring-[#F8F6FB]/5";
+    ? "border-[#E8A9C2]/50 bg-[#2A1830] shadow-[inset_0_1px_0_rgba(248,246,251,0.14)] ring-1 ring-[#E8A9C2]/15"
+    : "border-[#E8A9C2]/40 bg-[#2A1830] shadow-[inset_0_1px_0_rgba(248,246,251,0.1)] ring-1 ring-[#F8F6FB]/5";
 
   return (
     <div className="relative isolate flex flex-col items-center">
@@ -82,7 +82,7 @@ function PipelineGlassNode({
         />
         <Icon
           className={`relative z-10 h-4 w-4 sm:h-[1.125rem] sm:w-[1.125rem] ${
-            active ? "text-[#FFF6FB]" : "text-[#291639]"
+            active ? "text-[#FFF6FB]" : "text-[#FFF6FB]"
           }`}
           aria-hidden
         />

@@ -1,10 +1,12 @@
 import { useLayoutEffect, useEffect, useRef, useSyncExternalStore } from "react";
-import { ensureEntryLogoPreload } from "../utils/entryLogoPreload";
 import { ensureHeroVideoPreload } from "../utils/heroVideoPreload";
 import { media } from "../config/media";
+import { isHomePath } from "../utils/homeEntryGate";
 import {
   isRouteOverlayVisible,
+  markRouteContentReadyForPath,
   markRouteOverlayShownNow,
+  reconcileRouteOverlayAfterUpdate,
   resetRouteContentReady,
   setRouteOverlayPathname,
   setRouteOverlayVisible,
@@ -22,9 +24,11 @@ export function useRouteTransitionOverlay(pathname: string) {
 
   const pathnameRef = useRef(pathname);
 
-  useLayoutEffect(() => {
-    ensureEntryLogoPreload();
-  }, []);
+  useEffect(() => {
+    if (isHomePath(pathname)) {
+      ensureHeroVideoPreload(media.heroOffice);
+    }
+  }, [pathname]);
 
   useLayoutEffect(() => {
     setRouteOverlayPathname(pathname);
@@ -33,10 +37,6 @@ export function useRouteTransitionOverlay(pathname: string) {
     resetRouteContentReady();
     setRouteOverlayVisible(true);
     markRouteOverlayShownNow();
-  }, [pathname]);
-
-  useEffect(() => {
-    ensureHeroVideoPreload(media.heroOffice);
   }, [pathname]);
 
   useEffect(() => {
@@ -51,6 +51,44 @@ export function useRouteTransitionOverlay(pathname: string) {
 
     return () => window.clearInterval(id);
   }, [overlayVisible, pathname]);
+
+  /** Re-assert ready when the target page is mounted but HMR skipped the route effect. */
+  useEffect(() => {
+    if (!overlayVisible) return;
+
+    const attempt = () => {
+      const main = document.getElementById("main-content");
+      const mounted = main?.querySelector(
+        `[data-trevyk-route-page="${CSS.escape(pathname)}"]`,
+      );
+      if (mounted) markRouteContentReadyForPath(pathname);
+    };
+
+    const t0 = window.setTimeout(attempt, 120);
+    const t1 = window.setInterval(attempt, 400);
+    const stop = window.setTimeout(() => window.clearInterval(t1), 8000);
+
+    return () => {
+      window.clearTimeout(t0);
+      window.clearInterval(t1);
+      window.clearTimeout(stop);
+    };
+  }, [overlayVisible, pathname]);
+
+  useEffect(() => {
+    if (!import.meta.env.DEV || !import.meta.hot) return;
+
+    const onAfterUpdate = () => {
+      window.requestAnimationFrame(() => {
+        reconcileRouteOverlayAfterUpdate(pathname);
+      });
+    };
+
+    import.meta.hot.on("vite:afterUpdate", onAfterUpdate);
+    return () => {
+      import.meta.hot?.off("vite:afterUpdate", onAfterUpdate);
+    };
+  }, [pathname]);
 
   return { overlayVisible };
 }

@@ -6,7 +6,6 @@ import { TechnologyTeaser } from "../components/home/TechnologyTeaser";
 import { KiduartTeaser } from "../components/home/KiduartTeaser";
 import { ProcessTeaser } from "../components/home/ProcessTeaser";
 import { AboutTeaser } from "../components/home/AboutTeaser";
-import { ProofStrip } from "../components/home/ProofStrip";
 import { GrowthOffer } from "../components/home/GrowthOffer";
 import { HomeMidBand } from "../components/home/HomeMidBand";
 
@@ -34,7 +33,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       <HomeMidBand>
         <GrowthOffer />
         <div className="home-products-services-band">
-          <div className="relative z-[1]">
+          <div className="relative z-1">
             <ServicesTeaser settings={settings} />
           </div>
         </div>
@@ -47,7 +46,6 @@ export const HomePage: React.FC<HomePageProps> = ({
         <KiduartTeaser settings={settings} />
         <AboutTeaser settings={settings} />
         <ProcessTeaser settings={settings} />
-        <ProofStrip settings={settings} />
       </HomeMidBand>
     </div>
   );

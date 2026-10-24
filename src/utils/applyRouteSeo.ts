@@ -194,11 +194,11 @@ export function applyRouteSeo(pathname: string) {
       position: index + 1,
       name: service.title,
       description: service.tagline,
-      url: absoluteUrl("/services"),
+      url: absoluteUrl("/what-we-do"),
     })),
   });
 
-  if (path === "/kiduart") {
+  if (path === "/our-products") {
     upsertJsonLd("ld-software", {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
@@ -220,7 +220,7 @@ export function applyRouteSeo(pathname: string) {
       },
       isRelatedTo: {
         "@type": "WebPage",
-        url: absoluteUrl("/kiduart"),
+        url: absoluteUrl("/our-products"),
         name: "Kiduart on TREVYK Technologies",
       },
     });

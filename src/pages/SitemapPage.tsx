@@ -1,23 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { GUIDES } from "../data/guides";
-import { PageAtmosphere } from "../components/PageAtmosphere";
 
 const CORE = [
   { path: "/", label: "Home", note: "Websites, software, and growth in one introduction." },
-  { path: "/services", label: "Services", note: "The full catalogue, including starter plans." },
+  { path: "/what-we-do", label: "What we do", note: "The full catalogue, including starter plans." },
   { path: "/ai", label: "AI solutions", note: "Agents, RAG, and a Kiduart bridge—honest about what is live." },
   { path: "/technology", label: "Technology", note: "How systems are designed and kept maintainable." },
   { path: "/process", label: "Process", note: "Listen, plan, build, launch, support." },
-  { path: "/about", label: "About", note: "Noida practice, honest claims, who we work with." },
-  { path: "/kiduart", label: "Kiduart", note: "School ERP product lane." },
+  { path: "/who-we-are", label: "Who we are", note: "Company introduction, purpose, commitments, and how to reach us." },
+  { path: "/our-products", label: "Our products", note: "School ERP product lane." },
   { path: "/contact", label: "Contact", note: "Tell us the business and the budget." },
 ];
 
 export const SitemapPage: React.FC = () => {
   return (
     <div className="relative min-h-screen overflow-hidden pb-28 pt-36 sm:pt-44">
-      <PageAtmosphere variant="about" bands={[{ top: "18%", height: "12%", tone: "pink" }]} />
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <p className="font-mono-accent text-[11px] uppercase tracking-[0.28em] text-[#E8A9C2]">
           Index

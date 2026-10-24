@@ -14,7 +14,34 @@ type Listener = (visible: boolean) => void;
 let visible = true;
 let contentReady = false;
 let shownAt = Date.now();
+let activePathname = "/";
 const listeners = new Set<Listener>();
+
+type OverlayHmrState = {
+  visible?: boolean;
+  contentReady?: boolean;
+  shownAt?: number;
+  activePathname?: string;
+};
+
+/** Preserve overlay flags across Vite HMR so dev edits don't leave a blank shell. */
+if (import.meta.hot) {
+  const hot = import.meta.hot;
+  const saved = hot.data as OverlayHmrState;
+  if (saved.visible !== undefined) {
+    visible = saved.visible;
+    contentReady = saved.contentReady ?? false;
+    shownAt = saved.shownAt ?? Date.now();
+    activePathname = saved.activePathname ?? activePathname;
+  }
+  hot.dispose((data) => {
+    const next = data as OverlayHmrState;
+    next.visible = visible;
+    next.contentReady = contentReady;
+    next.shownAt = shownAt;
+    next.activePathname = activePathname;
+  });
+}
 
 function syncRouteOverlayDom(show: boolean) {
   if (typeof document === "undefined") return;
@@ -24,16 +51,7 @@ function syncRouteOverlayDom(show: boolean) {
   el.style.pointerEvents = show ? "auto" : "none";
   el.setAttribute("aria-hidden", show ? "false" : "true");
   if (show) {
-    const video = el.querySelector("video");
-    if (video) {
-      video.playbackRate = Math.max(2, entryLoader.playbackRate);
-      try {
-        video.currentTime = 0;
-      } catch {
-        /* ignore */
-      }
-      video.play().catch(() => {});
-    }
+    el.style.backgroundColor = entryLoader.background;
   }
 }
 
@@ -97,11 +115,16 @@ export function beginRouteTransition(): void {
 }
 
 export function setRouteOverlayVisible(next: boolean): void {
-  if (visible === next) return;
+  if (visible === next) {
+    if (!next) dismissTrevykBoot();
+    return;
+  }
   visible = next;
   if (next) {
     contentReady = false;
     shownAt = Date.now();
+  } else {
+    dismissTrevykBoot();
   }
   notify();
 }
@@ -111,10 +134,29 @@ export function markRouteOverlayShownNow(): void {
   contentReady = false;
 }
 
-let activePathname = "/";
-
 export function setRouteOverlayPathname(pathname: string): void {
   activePathname = pathname;
+}
+
+/** Dev / recovery: page is already mounted but overlay state was reset (e.g. HMR). */
+export function reconcileRouteOverlayAfterUpdate(pathname: string): void {
+  activePathname = pathname;
+  if (typeof document === "undefined") return;
+  const app = document.getElementById("trevyk-app");
+  const main = document.getElementById("main-content");
+  if (!app || !main) return;
+
+  dismissTrevykBoot();
+
+  const routeMounted = main.querySelector(
+    `[data-trevyk-route-page="${CSS.escape(pathname)}"]`,
+  );
+  if (!routeMounted) return;
+
+  contentReady = true;
+  if (visible) {
+    tryFinishOverlay(pathname);
+  }
 }
 
 /** Fired when the target route component has mounted (after Suspense). */

@@ -27,7 +27,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenArchitectureModal }) => {
     badge?: string;
     external?: boolean;
   }> = [
-    { label: "Kiduart School ERP", path: "/kiduart", badge: "Flagship" },
+    { label: "Kiduart School ERP", path: "/our-products", badge: "Flagship" },
     {
       label: "Kiduart official site",
       path: "https://kiduart.com",
@@ -43,15 +43,15 @@ export const Footer: React.FC<FooterProps> = ({ onOpenArchitectureModal }) => {
     { label: "Digital marketing", path: "/work/digital-marketing" },
     { label: "Social media", path: "/work/social-media" },
     { label: "Video and scripts", path: "/work/video-scripts" },
-    { label: "Custom Software", path: "/services" },
+    { label: "Custom Software", path: "/what-we-do" },
     { label: "Modular Core Technology", path: "/technology", badge: "Core" },
     { label: "Book Consultation", path: "/contact" },
   ];
 
   const navCompany = [
-    { label: "About Trevyk", path: "/about" },
+    { label: "Who we are", path: "/who-we-are" },
     { label: "5-Stage Engineering Process", path: "/process" },
-    { label: "IT Services Overview", path: "/services" },
+    { label: "IT Services Overview", path: "/what-we-do" },
     { label: "System Architecture", path: "/technology" },
     { label: "Site map", path: "/sitemap" },
     { label: "Inspect 3D Core", action: onOpenArchitectureModal },
@@ -121,7 +121,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenArchitectureModal }) => {
 
             <div className="flex flex-wrap gap-2">
               <Link
-                to="/about"
+                to="/who-we-are"
                 className="inline-flex items-center px-3.5 py-2 rounded-xl bg-[#1E1024] border border-[#E8A9C2]/35 text-xs font-mono-accent text-[#F8F6FB] hover:border-[#E8A9C2] hover:bg-[#24132B] transition-colors"
               >
                 Our vision

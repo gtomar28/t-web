@@ -9,9 +9,18 @@ export const site = {
   copyrightYear: 2026,
 } as const;
 
+/** WhatsApp Business — floating launcher + wa.me deep links */
+export const whatsappContact = {
+  /** Digits only, with country code (India +91) */
+  phoneE164Digits: "918810664797",
+  displayNumber: "+91 88106 64797",
+  prefilledMessage:
+    "Hello Trevyk Technologies, I would like to connect about your products and services.",
+} as const;
+
 export const navLinks = [
-  { label: "Work", href: "/services" },
-  { label: "Services", href: "/services" },
+  { label: "Work", href: "/what-we-do" },
+  { label: "Services", href: "/what-we-do" },
   { label: "About", href: "/process" },
   { label: "Contact", href: "/contact" },
 ] as const;
@@ -30,8 +39,8 @@ export const hero = {
   description:
     "Custom websites, web applications, and custom software for startups and local businesses, plus SEO, campaigns, social media, and video. Starter plans are scoped to your budget. Based in Noida.",
   primaryCta: { label: "Get a starter plan", href: "/contact" },
-  secondaryCta: { label: "Explore Kiduart", href: "/kiduart" },
-  tertiaryCta: { label: "View capabilities", href: "/services" },
+  secondaryCta: { label: "Explore Kiduart", href: "/our-products" },
+  tertiaryCta: { label: "View capabilities", href: "/what-we-do" },
   meta: [
     { label: "Product", value: "Kiduart School ERP" },
     { label: "Engineering", value: "Websites, apps, SEO" },
@@ -250,52 +259,41 @@ export const footer = {
   brand: {
     tagline: "Turning Vision Into Progress.",
     body:
-      "We build custom websites, web applications, and custom software, then help the business get found with SEO, campaigns, social media, and video. Starter plans. Clear scope. Based in Noida.",
-    flagshipLink: { label: "Kiduart School ERP", href: "/kiduart" },
-    flagshipTail:
-      "for Indian schools plus custom software when a product alone is not enough.",
-    visionCta: { label: "Our vision", href: "/process" },
+      "We build custom websites, web applications, and AI-powered software that help businesses grow. From strategy to launch and beyond, we turn your ideas into reliable digital products.",
+    flagshipLink: { label: "Kiduart School ERP", href: "/our-products" },
+    flagshipTail: "for Indian schools.",
+    workCta: { label: "Our Work", href: "/what-we-do" },
     kiduartCta: { label: "kiduart.com", href: "https://kiduart.com" },
   },
-  solutionsProducts: {
-    title: "Solutions & products",
+  offerings: {
+    title: "Our offerings",
     links: [
-      { label: "Kiduart School ERP", href: "/kiduart", tag: "Flagship" },
-      { label: "Kiduart official site", href: "https://kiduart.com" },
-      { label: "AI solutions", href: "/contact" },
-      { label: "Custom AI agents", href: "/contact" },
-      { label: "RAG assistants", href: "/contact" },
-      { label: "AI for schools", href: "/contact" },
-      { label: "Custom websites", href: "/services" },
-      { label: "Web applications", href: "/services" },
-      { label: "SEO & campaigns", href: "/contact" },
-      { label: "Digital marketing", href: "/contact" },
-      { label: "Social media", href: "/contact" },
-      { label: "Video and scripts", href: "/contact" },
-      { label: "Custom software", href: "/services" },
-      { label: "Modular Core Technology", href: "/contact", tag: "Core" },
-      { label: "Book consultation", href: "/contact" },
+      { label: "Kiduart School ERP", href: "/our-products", tag: "Flagship" },
+      { label: "Custom Websites", href: "/work/custom-websites" },
+      { label: "Web Applications", href: "/work/web-applications" },
+      { label: "AI Solutions", href: "/ai" },
+      { label: "Digital Marketing", href: "/work/digital-marketing" },
+      { label: "Consultation & Support", href: "/contact" },
     ],
   },
   company: {
     title: "Company",
     links: [
-      { label: "About Trevyk", href: "/process" },
-      { label: "5-Stage Engineering Process", href: "/process" },
-      { label: "IT Services Overview", href: "/services" },
-      { label: "System Architecture", href: "/services" },
-      { label: "Site map", href: "/sitemap" },
-      { label: "Inspect 3D Core", href: "/contact" },
-      { label: "Book consultation", href: "/contact" },
+      { label: "Who We Are", href: "/who-we-are" },
+      { label: "What We Do", href: "/what-we-do" },
+      { label: "Our Products", href: "/our-products" },
+      { label: "Our Process", href: "/process" },
+      { label: "Technology", href: "/technology" },
+      { label: "Contact", href: "/contact" },
     ],
   },
   howWeWork: {
     title: "How we work",
     items: [
-      { text: "Publish only what exists", tag: "Honest" },
-      { text: "Scoped delivery, clear handoff", tag: "Craft" },
-      { text: "School data export on request", tag: "Privacy" },
-      { text: "Reply within one business day", tag: "Support" },
+      { text: "Publish only what exists.", tag: "Honest" },
+      { text: "Clear scope, clear delivery.", tag: "Transparent" },
+      { text: "Secure & privacy-ready.", tag: "Private" },
+      { text: "Long-term support.", tag: "Support" },
     ],
   },
   social: [

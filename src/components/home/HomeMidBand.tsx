@@ -10,8 +10,11 @@ export function HomeMidBand({ children }: { children: React.ReactNode }) {
       className="home-mid-atmosphere relative z-20 isolate text-plum-neutral"
       aria-label="Home content sections"
     >
-      <div className="grain pointer-events-none absolute inset-0 z-0" aria-hidden />
-      <div className="relative z-[1]">{children}</div>
+      <div
+        className="grain pointer-events-none absolute inset-0 z-0"
+        aria-hidden
+      />
+      <div className="relative z-1">{children}</div>
     </div>
   );
 }

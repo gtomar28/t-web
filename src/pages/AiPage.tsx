@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Brain } from "lucide-react";
-import { PageAtmosphere } from "../components/PageAtmosphere";
 import { StudioFrame } from "../components/StudioFrame";
 import { AI_HUB_FAQS } from "../data/aiHub";
 
@@ -69,13 +68,6 @@ const PHASES = [
 export const AiPage: React.FC = () => {
   return (
     <div className="relative min-h-screen overflow-hidden pb-28 pt-36 sm:pt-44">
-      <PageAtmosphere
-        variant="services"
-        bands={[
-          { top: "18%", height: "12%", tone: "ink" },
-          { top: "70%", height: "14%", tone: "pink" },
-        ]}
-      />
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-end gap-8 lg:grid-cols-12">
           <div className="lg:col-span-7">
@@ -102,7 +94,7 @@ export const AiPage: React.FC = () => {
                 <ArrowRight className="ml-1.5 h-4 w-4" />
               </Link>
               <Link
-                to="/services"
+                to="/what-we-do"
                 className="inline-flex items-center rounded-full border border-[#B9A6D1]/40 px-5 py-3 text-sm font-semibold text-[#F8F6FB]"
               >
                 Full services catalogue

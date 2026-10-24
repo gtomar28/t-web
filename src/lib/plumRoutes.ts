@@ -3,8 +3,8 @@ export function resolvePlumHref(href: string): string {
   if (href.startsWith("http") || href.startsWith("mailto:")) return href;
   const map: Record<string, string> = {
     "#contact": "/contact",
-    "#work": "/services",
-    "#services": "/services",
+    "#work": "/what-we-do",
+    "#services": "/what-we-do",
     "#process": "/process",
   };
   if (href.startsWith("#")) return map[href] ?? "/";

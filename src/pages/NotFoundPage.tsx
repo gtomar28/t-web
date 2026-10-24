@@ -1,11 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { PageAtmosphere } from "../components/PageAtmosphere";
 
 export const NotFoundPage: React.FC = () => {
   return (
     <div className="relative min-h-screen overflow-hidden pb-28 pt-36 sm:pt-44">
-      <PageAtmosphere variant="about" bands={[{ top: "22%", height: "12%", tone: "pink" }]} />
       <div className="relative z-10 mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <p className="font-mono-accent text-[11px] uppercase tracking-[0.28em] text-[#E8A9C2]">
           404

@@ -1,4 +1,11 @@
 {
+  "redirects": [
+    {
+      "source": "/about",
+      "destination": "/who-we-are",
+      "permanent": true
+    }
+  ],
   "installCommand": "npm ci",
   "buildCommand": "NODE_OPTIONS=--max-old-space-size=8192 npm run build:site",
   "outputDirectory": "dist",

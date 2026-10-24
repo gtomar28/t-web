@@ -255,13 +255,11 @@
   background-repeat: no-repeat;
 }
 
-.home-mid-atmosphere {
-  background-color: var(--background);
+/* Site-wide checkered engineering grid (inner pages; home mid-band has its own). */
+.trevyk-checkered-bg {
+  background-color: #1a0f18;
   background-image:
-    linear-gradient(
-      rgba(185, 166, 209, 0.085) 1px,
-      transparent 1px
-    ),
+    linear-gradient(rgba(185, 166, 209, 0.085) 1px, transparent 1px),
     linear-gradient(
       90deg,
       rgba(185, 166, 209, 0.085) 1px,
@@ -277,12 +275,38 @@
       rgba(232, 169, 194, 0.07),
       transparent 55%
     ),
+    linear-gradient(180deg, #160a1c 0%, #1a0f18 35%, #1e1024 100%),
+    url("/images/trevyk-checkered-bg.jpg");
+  background-size:
+    32px 32px,
+    32px 32px,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    cover;
+  background-position: center center;
+}
+
+.home-mid-atmosphere {
+  background-color: var(--background);
+  background-image:
+    linear-gradient(rgba(185, 166, 209, 0.085) 1px, transparent 1px),
     linear-gradient(
-      180deg,
-      #160a1c 0%,
-      #1a0f18 35%,
-      #1e1024 100%
-    );
+      90deg,
+      rgba(185, 166, 209, 0.085) 1px,
+      transparent 1px
+    ),
+    radial-gradient(
+      ellipse 70% 45% at 18% 8%,
+      rgba(107, 74, 135, 0.2),
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 55% 40% at 88% 22%,
+      rgba(232, 169, 194, 0.07),
+      transparent 55%
+    ),
+    linear-gradient(180deg, #160a1c 0%, #1a0f18 35%, #1e1024 100%);
   background-size: 32px 32px, 32px 32px, 100% 100%, 100% 100%, 100% 100%;
 }
 
@@ -309,7 +333,26 @@
   );
 }
 
-/* Route-change logo loader: gentle center zoom while visible */
+/* Min height = one screen; content can grow; no vertical centering by default. */
+.trevyk-viewport-section {
+  box-sizing: border-box;
+  min-height: 100dvh;
+  min-height: 100svh;
+}
+
+.trevyk-viewport-section--center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Home scroll bands: center block in the viewport (content shorter than one screen). */
+.home-mid-atmosphere .trevyk-viewport-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 @keyframes entry-loader-video-zoom {
   0% {
     transform: scale(1);
@@ -365,5 +408,265 @@
   }
   100% {
     background-position: -100% 0;
+  }
+}
+
+@keyframes trevyk-footer-wordmark-sweep {
+  0% {
+    background-position: 115% 50%;
+  }
+  100% {
+    background-position: -15% 50%;
+  }
+}
+
+.trevyk-footer-wordmark {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  font-size: clamp(1.65rem, 4.5vw, 6.5rem);
+  line-height: 0.92;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  overflow: visible;
+  background-image: linear-gradient(
+    100deg,
+    #241428 0%,
+    #3d2548 14%,
+    #5c3a6e 28%,
+    #8d6a9e 40%,
+    #d4c4dc 47%,
+    #faf8fc 50%,
+    #d4c4dc 53%,
+    #8d6a9e 60%,
+    #5c3a6e 72%,
+    #3d2548 86%,
+    #241428 100%
+  );
+  background-size: 240% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  paint-order: stroke fill;
+  -webkit-text-stroke: 0.45px rgba(210, 192, 200, 0.35);
+  filter: drop-shadow(0 1px 0 rgba(15, 8, 16, 0.9))
+    drop-shadow(0 0 22px rgba(15, 8, 16, 0.45));
+  animation: trevyk-footer-wordmark-sweep 2s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trevyk-footer-wordmark {
+    animation: none;
+    background-position: 42% 50%;
+  }
+}
+
+@keyframes trevyk-build-together-bg-drift {
+  0% {
+    background-position: 0% 40%, 100% 60%, 0% 50%;
+  }
+  50% {
+    background-position: 100% 60%, 0% 40%, 100% 50%;
+  }
+  100% {
+    background-position: 0% 40%, 100% 60%, 0% 50%;
+  }
+}
+
+@keyframes trevyk-build-together-bg-glow {
+  0% {
+    transform: translate3d(-8%, 0, 0) scale(1.05);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translate3d(8%, -2%, 0) scale(1.12);
+    opacity: 0.72;
+  }
+  100% {
+    transform: translate3d(-8%, 0, 0) scale(1.05);
+    opacity: 0.45;
+  }
+}
+
+.trevyk-build-together-live-bg {
+  background-color: #1a0f18;
+  background-image: radial-gradient(
+      ellipse 85% 70% at 18% 42%,
+      rgba(60, 35, 82, 0.62) 0%,
+      rgba(63, 23, 76, 0.372) 52%,
+      transparent 52%
+    ),
+    radial-gradient(
+      ellipse 75% 58% at 82% 58%,
+      rgba(60, 20, 109, 0.777) 0%,
+      rgba(107, 54, 145, 0.499) 45%,
+      transparent 38%
+    ),
+    linear-gradient(
+      118deg,
+      #120a14 0%,
+      #1a0f18 14%,
+      #2a1830 28%,
+      #55356a 42%,
+      #6b4a87 52%,
+      #3d2548 64%,
+      #8558a5 76%,
+      #2a1830 88%,
+      #1e1024 100%
+    );
+  background-size: 200% 200%, 220% 220%, 320% 320%;
+  background-repeat: no-repeat;
+  animation: trevyk-build-together-bg-drift 16s ease-in-out infinite;
+}
+
+.trevyk-build-together-live-bg__glow {
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(232, 169, 194, 0.16) 0%,
+    rgba(107, 74, 135, 0.1) 38%,
+    transparent 68%
+  );
+  mix-blend-mode: screen;
+  animation: trevyk-build-together-bg-glow 11s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.trevyk-build-together-live-bg__vignette {
+  background: linear-gradient(
+      to bottom,
+      rgba(15, 8, 16, 0.42) 0%,
+      transparent 22%,
+      transparent 78%,
+      rgba(15, 8, 16, 0.48) 100%
+    ),
+    linear-gradient(
+      to right,
+      rgba(15, 8, 16, 0.35) 0%,
+      transparent 18%,
+      transparent 82%,
+      rgba(15, 8, 16, 0.35) 100%
+    );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trevyk-build-together-live-bg,
+  .trevyk-build-together-live-bg__glow {
+    animation: none;
+  }
+
+  .trevyk-build-together-live-bg {
+    background-position: 40% 50%, 60% 50%, 35% 50%;
+  }
+}
+
+/* Contact form card — dark plum base, moving gradient, corner glow blobs */
+@keyframes trevyk-contact-form-plum-drift {
+  0%,
+  100% {
+    background-position:
+      0 0,
+      0 0,
+      0% 42%;
+  }
+  50% {
+    background-position:
+      0 0,
+      0 0,
+      100% 58%;
+  }
+}
+
+@keyframes trevyk-contact-form-blob-drift-tr {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate3d(-3%, 4%, 0) scale(1.1);
+    opacity: 0.82;
+  }
+}
+
+@keyframes trevyk-contact-form-blob-drift-bl {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.02);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate3d(4%, -3%, 0) scale(1.12);
+    opacity: 0.78;
+  }
+}
+
+.trevyk-contact-form-card-bg {
+  background-color: #1a0f18;
+  background-image: linear-gradient(
+      rgba(185, 166, 209, 0.07) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(185, 166, 209, 0.07) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      125deg,
+      #120a14 0%,
+      #1a0f18 18%,
+      #241428 36%,
+      #3d2548 52%,
+      #55356a 62%,
+      #2a1830 78%,
+      #1e1024 100%
+    );
+  background-size:
+    32px 32px,
+    32px 32px,
+    280% 280%;
+  background-repeat: repeat, repeat, no-repeat;
+  animation: trevyk-contact-form-plum-drift 20s ease-in-out infinite;
+}
+
+.trevyk-contact-form-card__blob-tr {
+  background: radial-gradient(
+    ellipse 58% 48% at 94% 6%,
+    rgba(185, 166, 209, 0.38) 0%,
+    rgba(133, 88, 165, 0.2) 38%,
+    transparent 72%
+  );
+  mix-blend-mode: screen;
+  animation: trevyk-contact-form-blob-drift-tr 13s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.trevyk-contact-form-card__blob-bl {
+  background: radial-gradient(
+    ellipse 52% 46% at 6% 94%,
+    rgba(107, 74, 135, 0.45) 0%,
+    rgba(232, 169, 194, 0.14) 42%,
+    transparent 70%
+  );
+  mix-blend-mode: screen;
+  animation: trevyk-contact-form-blob-drift-bl 16s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trevyk-contact-form-card-bg,
+  .trevyk-contact-form-card__blob-tr,
+  .trevyk-contact-form-card__blob-bl {
+    animation: none;
+  }
+
+  .trevyk-contact-form-card-bg {
+    background-position:
+      0 0,
+      0 0,
+      42% 50%;
   }
 }

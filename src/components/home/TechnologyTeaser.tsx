@@ -22,7 +22,7 @@ export const TechnologyTeaser: React.FC<TechnologyTeaserProps> = ({
   return (
     <section
       id="technology-teaser"
-      className="relative bg-background px-4 py-14 sm:px-6 sm:py-20 lg:px-8"
+      className="trevyk-viewport-section relative bg-background px-4 py-14 sm:px-6 sm:py-20 lg:px-8"
     >
       <div className="mx-auto max-w-7xl space-y-10 lg:space-y-14">
         <ScrollReveal reducedMotion={settings.reducedMotion}>

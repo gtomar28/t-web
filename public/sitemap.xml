@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://www.trevyk.in/</loc><lastmod>2026-10-13</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://www.trevyk.in/services</loc><lastmod>2026-10-13</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.trevyk.in/what-we-do</loc><lastmod>2026-10-22</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://www.trevyk.in/ai</loc><lastmod>2026-10-13</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://www.trevyk.in/work/custom-websites</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
   <url><loc>https://www.trevyk.in/work/web-applications</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
@@ -15,8 +15,8 @@
   <url><loc>https://www.trevyk.in/work/ai-for-schools</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://www.trevyk.in/technology</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.trevyk.in/process</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.trevyk.in/about</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.trevyk.in/kiduart</loc><lastmod>2026-10-13</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.trevyk.in/who-we-are</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.trevyk.in/our-products</loc><lastmod>2026-10-22</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://www.trevyk.in/contact</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
   <url><loc>https://www.trevyk.in/sitemap</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
 </urlset>

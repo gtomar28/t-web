@@ -190,11 +190,6 @@ export const PageAtmosphere: React.FC<PageAtmosphereProps> = ({
         />
       ))}
 
-      {/* Corner frames  continuity with home hero */}
-      <div className="absolute top-24 left-4 sm:left-8 w-8 h-8 border-l border-t border-[#E8A9C2]/35" />
-      <div className="absolute top-24 right-4 sm:right-10 w-8 h-8 border-r border-t border-[#B9A6D1]/30" />
-      <div className="absolute bottom-10 left-4 sm:left-8 w-8 h-8 border-l border-b border-[#B9A6D1]/25" />
-      <div className="absolute bottom-10 right-4 sm:right-10 w-8 h-8 border-r border-b border-[#E8A9C2]/25" />
     </div>
   );
 };

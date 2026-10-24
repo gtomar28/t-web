@@ -5,10 +5,10 @@
 ## Site
 
 - [Home](https://www.trevyk.in/)
-- [Kiduart](https://www.trevyk.in/kiduart)
-- [Services](https://www.trevyk.in/services)
+- [Our products](https://www.trevyk.in/our-products)
+- [What we do](https://www.trevyk.in/what-we-do)
 - [Technology](https://www.trevyk.in/technology)
-- [About](https://www.trevyk.in/about)
+- [Who we are](https://www.trevyk.in/who-we-are)
 - [Process](https://www.trevyk.in/process)
 - [Contact](https://www.trevyk.in/contact)
 - [Site map](https://www.trevyk.in/sitemap)

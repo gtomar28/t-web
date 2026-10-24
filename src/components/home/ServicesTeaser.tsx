@@ -26,7 +26,7 @@ export const ServicesTeaser: React.FC<ServicesTeaserProps> = ({ settings }) => {
       desc: "Purpose-built systems, integrations, and internal tools when catalogs and SaaS fall short.",
       tag: "01 / ENGINEERING",
       icon: Building2,
-      href: "/services",
+      href: "/what-we-do",
       outcome: "Scope a custom engagement",
     },
     {
@@ -35,7 +35,7 @@ export const ServicesTeaser: React.FC<ServicesTeaserProps> = ({ settings }) => {
       desc: "Domain products with clear ownership  starting with Kiduart School ERP for Indian institutions.",
       tag: "02 / PRODUCT",
       icon: GraduationCap,
-      href: "/kiduart",
+      href: "/our-products",
       outcome: "Ship a ready product lane",
     },
     {
@@ -44,7 +44,7 @@ export const ServicesTeaser: React.FC<ServicesTeaserProps> = ({ settings }) => {
       desc: "Custom websites, web applications, SEO, campaigns, social media, and video for businesses that need to be found.",
       tag: "03 / GROWTH",
       icon: Layers3,
-      href: "/services",
+      href: "/what-we-do",
       outcome: "Plan a delivery track",
     },
   ];
@@ -52,10 +52,10 @@ export const ServicesTeaser: React.FC<ServicesTeaserProps> = ({ settings }) => {
   return (
     <section
       id="services-teaser"
-      className="relative py-14 sm:py-20 px-4 sm:px-6 lg:px-8 overflow-hidden"
+      className="trevyk-viewport-section relative overflow-hidden px-4 py-14 sm:px-6 sm:py-20 lg:px-8"
     >
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:items-center">
           <ScrollReveal
             className="lg:col-span-5 flex flex-col items-start"
             reducedMotion={settings.reducedMotion}
@@ -169,7 +169,7 @@ export const ServicesTeaser: React.FC<ServicesTeaserProps> = ({ settings }) => {
 
             <div className="flex justify-end mt-4">
               <Link
-                to="/services"
+                to="/what-we-do"
                 onClick={() => soundEngine.playClick("soft")}
                 className="inline-flex items-center space-x-2 px-5 py-3 rounded-full bg-[#6B4A87] text-white font-heading text-xs sm:text-sm font-semibold hover:bg-[#8558A5] transition-all group"
               >

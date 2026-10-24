@@ -11,6 +11,7 @@ import {
 import { SiteSettings } from "../../types";
 import { soundEngine } from "../../utils/audioEngine";
 import { ScrollReveal } from "../ScrollReveal";
+import { MagneticCard } from "../MagneticCard";
 
 interface AboutTeaserProps {
   settings: SiteSettings;
@@ -48,12 +49,12 @@ export const AboutTeaser: React.FC<AboutTeaserProps> = ({ settings }) => {
   return (
     <section
       id="about-teaser"
-      className="relative w-full border-t border-[#B9A6D1]/15 bg-background py-16 sm:py-20 lg:py-24"
+      className="trevyk-viewport-section relative w-full border-t border-[#B9A6D1]/15 bg-background py-16 sm:py-20 lg:py-24"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-10">
           <ScrollReveal
-            className="lg:col-span-6 xl:col-span-5"
+            className="lg:col-span-6 xl:col-span-7"
             reducedMotion={settings.reducedMotion}
           >
             <div className="inline-flex items-center gap-2 rounded-full border border-[#E8A9C2]/45 bg-[#1E1024]/80 px-3.5 py-1.5 font-mono-accent text-xs text-[#E8A9C2]">
@@ -86,7 +87,7 @@ export const AboutTeaser: React.FC<AboutTeaserProps> = ({ settings }) => {
 
             <div className="mt-8">
               <Link
-                to="/about"
+                to="/who-we-are"
                 onClick={() => soundEngine.playClick("soft")}
                 className="group inline-flex items-center gap-2 rounded-full border border-[#B9A6D1]/45 bg-[#1E1024]/70 px-6 py-3 font-heading text-xs font-semibold text-[#F8F6FB] transition-colors hover:border-[#E8A9C2]/55 sm:text-sm"
               >
@@ -97,7 +98,7 @@ export const AboutTeaser: React.FC<AboutTeaserProps> = ({ settings }) => {
           </ScrollReveal>
 
           <ScrollReveal
-            className="lg:col-span-6 xl:col-span-7"
+            className="lg:col-span-6 xl:col-span-5f"
             variant="right"
             reducedMotion={settings.reducedMotion}
           >
@@ -116,31 +117,53 @@ export const AboutTeaser: React.FC<AboutTeaserProps> = ({ settings }) => {
           </ScrollReveal>
         </div>
 
-        <div className="mt-16 grid grid-cols-1 divide-y divide-[#B9A6D1]/20 border-t border-[#B9A6D1]/20 sm:mt-20 md:grid-cols-3 md:divide-x md:divide-y-0">
-          {PILLARS.map((pillar) => {
+        <div className="mt-14 grid grid-cols-1 gap-4 sm:mt-16 md:grid-cols-3 md:gap-5">
+          {PILLARS.map((pillar, i) => {
             const Icon = pillar.icon;
             return (
               <ScrollReveal
                 key={pillar.num}
-                className="px-0 py-8 md:px-8 md:py-10 first:md:pl-0 last:md:pr-0"
+                delay={0.05 * i}
                 reducedMotion={settings.reducedMotion}
+                className="h-full"
               >
-                <p className="font-mono-accent text-[11px] tracking-[0.2em] text-[#B9A6D1]/80">
-                  {pillar.num}
-                </p>
-                <div className="mt-3 inline-flex rounded-lg border border-[#B9A6D1]/30 bg-[#1E1024]/80 p-2.5">
-                  <Icon className="h-4 w-4 text-[#E8A9C2]" aria-hidden />
-                </div>
-                <h3
-                  className={`mt-4 font-heading text-lg font-semibold sm:text-xl ${
-                    pillar.accent ? "text-[#E8A9C2]" : "text-[#F8F6FB]"
-                  }`}
+                <MagneticCard
+                  reducedMotion={settings.reducedMotion}
+                  className="block h-full"
                 >
-                  {pillar.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-[#B9A6D1]">
-                  {pillar.desc}
-                </p>
+                  <article
+                    className={`group relative flex h-full min-h-[11.5rem] flex-col overflow-hidden rounded-2xl border bg-[#1E1024]/90 p-6 pl-7 shadow-[0_12px_40px_rgba(0,0,0,0.35)] transition-colors ${
+                      pillar.accent
+                        ? "border-[#E8A9C2]/55 ring-1 ring-[#E8A9C2]/20"
+                        : "border-[#B9A6D1]/45 hover:border-[#E8A9C2]/55"
+                    }`}
+                  >
+                    <div
+                      className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-[#6B4A87] via-[#B9A6D1] to-[#E8A9C2]"
+                      aria-hidden
+                    />
+                    <div className="flex items-start justify-between gap-3">
+                      <span className="font-mono-accent text-[10px] font-semibold tracking-[0.22em] text-[#E8A9C2]/90">
+                        {pillar.num}
+                      </span>
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#B9A6D1]/45 bg-[#6B4A87]/30 text-[#E8A9C2]">
+                        <Icon className="h-5 w-5" aria-hidden />
+                      </div>
+                    </div>
+                    <h3
+                      className={`mt-5 font-heading text-lg font-bold leading-snug sm:text-xl ${
+                        pillar.accent
+                          ? "text-[#E8A9C2]"
+                          : "text-[#F8F6FB] group-hover:text-[#E8A9C2] transition-colors"
+                      }`}
+                    >
+                      {pillar.title}
+                    </h3>
+                    <p className="mt-2.5 flex-1 text-sm leading-relaxed text-[#E7E1F0]/90">
+                      {pillar.desc}
+                    </p>
+                  </article>
+                </MagneticCard>
               </ScrollReveal>
             );
           })}

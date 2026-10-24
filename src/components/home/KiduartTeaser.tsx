@@ -27,7 +27,7 @@ export const KiduartTeaser: React.FC<KiduartTeaserProps> = ({ settings }) => {
   return (
     <section
       id="kiduart-teaser"
-      className="relative overflow-hidden px-4 py-14 sm:px-6 sm:py-20 lg:px-8"
+      className="trevyk-viewport-section relative overflow-hidden px-4 py-14 sm:px-6 sm:py-20 lg:px-8"
     >
       <div className="relative max-w-7xl mx-auto">
         <ScrollReveal className="mb-10" reducedMotion={settings.reducedMotion}>

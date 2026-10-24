@@ -25,7 +25,9 @@ class SoundEngine {
     }
   }
 
-  public setEnabled(enabled: boolean) {
+  public setEnabled(enabled: boolean, options?: { feedback?: boolean }) {
+    const feedback = options?.feedback !== false;
+    const wasEnabled = this.enabled;
     this.enabled = enabled;
     if (enabled) {
       this.init();
@@ -33,7 +35,9 @@ class SoundEngine {
         this.masterGain.gain.cancelScheduledValues(this.ctx.currentTime);
         this.masterGain.gain.linearRampToValueAtTime(0.25, this.ctx.currentTime + 0.05);
       }
-      this.playToggle(true);
+      if (feedback && !wasEnabled) {
+        this.playToggle(true);
+      }
     } else {
       if (this.masterGain && this.ctx) {
         this.masterGain.gain.cancelScheduledValues(this.ctx.currentTime);

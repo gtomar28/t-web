@@ -7,8 +7,6 @@ import {
   Layers,
   GraduationCap,
   Cpu,
-  EyeOff,
-  Eye,
   Volume2,
   VolumeX,
   MessageSquareCode,
@@ -92,11 +90,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   const navLinks: MainNavLink[] = [
-    { label: "Who we are", path: "/about", icon: Info },
-    { label: "What we do", path: "/services", icon: Cpu },
+    { label: "Who we are", path: "/who-we-are", icon: Info },
+    { label: "What we do", path: "/what-we-do", icon: Cpu },
     {
       label: "Our Products",
-      path: "/kiduart",
+      path: "/our-products",
       icon: GraduationCap,
       // label: "Kiduart",
       // badge: "Flagship",
@@ -114,7 +112,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { label: "Services", path: "/services", icon: Cpu },
     { label: "Technology", path: "/technology", badge: "Core", icon: Layers },
     { label: "Kiduart", path: "/kiduart", badge: "Flagship", icon: GraduationCap },
-    { label: "About", path: "/about", icon: Info },
+    { label: "Who we are", path: "/who-we-are", icon: Info },
     Separate Contact pill CTA lived in the right action cluster (pre–text-link nav).
     */
   ];
@@ -225,28 +223,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </button>
 
-            {/* Motion Preference Toggle */}
-            <button
-              id="motion-toggle-btn"
-              onClick={() => {
-                soundEngine.playClick("soft");
-                onUpdateSettings({ reducedMotion: !settings.reducedMotion });
-              }}
-              title={
-                settings.reducedMotion ? "Enable 3D Motion" : "Reduce Motion"
-              }
-              aria-label={
-                settings.reducedMotion ? "Enable 3D Motion" : "Reduce Motion"
-              }
-              className="p-2 rounded-full bg-[#1E1024]/80 border border-[#6B4A87]/40 text-[#B9A6D1] hover:text-[#E8A9C2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8A9C2] transition-colors"
-              data-cursor-label="MOTION"
-            >
-              {settings.reducedMotion ? (
-                <EyeOff className="w-4 h-4" />
-              ) : (
-                <Eye className="w-4 h-4" />
-              )}
-            </button>
+            {/* Motion (eye) toggle — removed from header; prefers-reduced-motion still respected via OS setting in App */}
 
             {/* Architecture Modal CTA */}
             <MagneticButton
@@ -428,7 +405,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </button>
                 </div>
 
-                {/* Primary Action Button in Drawer */}
                 <button
                   onClick={() => {
                     soundEngine.playClick("hero");

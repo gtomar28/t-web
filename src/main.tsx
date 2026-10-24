@@ -2,13 +2,17 @@ import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
-import { ensureEntryLogoPreload } from './utils/entryLogoPreload';
-
-ensureEntryLogoPreload();
+/** Stale lazy chunks after HMR often cause an empty Suspense shell until a full reload. */
+if (import.meta.hot) {
+  window.addEventListener('vite:preloadError', (event) => {
+    event.preventDefault();
+    window.location.reload();
+  });
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
   </StrictMode>,
 );
-// #trevyk-boot stays until App hands off to the cinematic preloader or reveals the page.
+// #trevyk-boot stays until App dismisses the boot layer or reveals the page.

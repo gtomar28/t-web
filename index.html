@@ -69,25 +69,10 @@
     <link
       rel="preload"
       href="/images/kiduart/Trevyk_Technologies_logo_animation_1080p_20261020233711.mp4"
-      as="fetch"
+      as="video"
       type="video/mp4"
+      fetchpriority="high"
     />
-    <!-- Home hero: start downloading before React (same URL as `media.heroOffice`). -->
-    <link
-      rel="preload"
-      href="/videos/hero-office-loop.mp4"
-      as="fetch"
-      type="video/mp4"
-    />
-    <script>
-      (function () {
-        var src = "/videos/hero-office-loop.mp4";
-        try {
-          fetch(src, { priority: "high" });
-        } catch (e) {}
-      })();
-    </script>
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- Non-blocking Google Fonts (swap after load) -->
@@ -165,7 +150,9 @@
   <body
     class="bg-[#2A1830] text-[#F8F6FB] antialiased selection:bg-[#E8A9C2] selection:text-[#241428] overflow-x-hidden"
   >
-    <div id="trevyk-boot" aria-busy="true" aria-live="polite" aria-label="Loading Trevyk Technologies"></div>
+    <div id="trevyk-boot" aria-busy="true" aria-live="polite" aria-label="Loading Trevyk Technologies">
+      <img src="/trevyk-logo-on-dark.png" width="200" height="200" alt="" decoding="async" />
+    </div>
     <div id="root">
       <!-- trevyk-static-start -->
       <article class="trevyk-seo-shell">
@@ -176,7 +163,7 @@
           video. Starter plans are scoped to your budget. Based in Noida.
         </p>
         <nav aria-label="Site">
-          <a href="/services">Services</a>
+          <a href="/what-we-do">What we do</a>
           <a href="/work/custom-websites">Custom websites</a>
           <a href="/work/web-applications">Web applications</a>
           <a href="/work/seo">SEO</a>
@@ -185,8 +172,8 @@
           <a href="/work/video-scripts">Video and scripts</a>
           <a href="/technology">Technology</a>
           <a href="/process">Process</a>
-          <a href="/about">About</a>
-          <a href="/kiduart">Kiduart</a>
+          <a href="/who-we-are">Who we are</a>
+          <a href="/our-products">Our products</a>
           <a href="/contact">Contact</a>
           <a href="/sitemap">Site map</a>
         </nav>

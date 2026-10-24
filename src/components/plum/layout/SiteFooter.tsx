@@ -1,12 +1,11 @@
+import { Linkedin, Mail } from "lucide-react";
 import { ctaSection, footer, site } from "../../../content/home";
 import { FooterSolarVideo } from "./FooterSolarVideo";
 import { SectionLabel } from "../ui/SectionLabel";
 import { PageContainer } from "../ui/PageContainer";
 import { PlumLink } from "../ui/PlumLink";
 import { TrevykLogo } from "../../TrevykLogo";
-
-const wordmarkLine1 = "TREVYK";
-const wordmarkLine2 = "TECHNOLOGIES";
+import { FooterWordmark } from "./FooterWordmark";
 
 function FooterTag({ children }: { children: React.ReactNode }) {
   return (
@@ -39,6 +38,21 @@ function TrevykMark() {
   );
 }
 
+const FOOTER_LINK_HOVER =
+  "group inline-flex max-w-full items-center text-sm text-plum-neutral/90 transition-colors hover:text-plum-neutral [text-shadow:0_1px_10px_rgba(0,0,0,0.35)]";
+
+const FOOTER_LINK_UNDERLINE =
+  "pointer-events-none absolute bottom-0 left-1/2 h-[2px] w-0 -translate-x-1/2 rounded-full bg-gradient-to-r from-[#E8A9C2] via-[#4A3058] to-[#E8A9C2] opacity-90 transition-[width] duration-300 ease-out group-hover:w-full";
+
+function FooterLinkLabel({ label }: { label: string }) {
+  return (
+    <span className="relative inline-block max-w-full pb-1">
+      <span className="truncate">{label}</span>
+      <span className={FOOTER_LINK_UNDERLINE} aria-hidden />
+    </span>
+  );
+}
+
 function FooterLink({
   href,
   label,
@@ -50,27 +64,29 @@ function FooterLink({
   tag?: string;
   external?: boolean;
 }) {
-  const className =
-    "inline-flex max-w-full items-center text-sm text-plum-neutral/90 transition hover:text-plum-neutral [text-shadow:0_1px_10px_rgba(0,0,0,0.35)]";
+  const content = (
+    <>
+      <FooterLinkLabel label={label} />
+      {tag ? <FooterTag>{tag}</FooterTag> : null}
+    </>
+  );
 
   if (external || href.startsWith("http")) {
     return (
       <a
         href={href}
-        className={className}
+        className={FOOTER_LINK_HOVER}
         target="_blank"
         rel="noopener noreferrer"
       >
-        <span className="truncate">{label}</span>
-        {tag ? <FooterTag>{tag}</FooterTag> : null}
+        {content}
       </a>
     );
   }
 
   return (
-    <PlumLink href={href} className={className}>
-      <span className="truncate">{label}</span>
-      {tag ? <FooterTag>{tag}</FooterTag> : null}
+    <PlumLink href={href} className={FOOTER_LINK_HOVER}>
+      {content}
     </PlumLink>
   );
 }
@@ -78,49 +94,65 @@ function FooterLink({
 type SiteFooterProps = {
   /** When false, solar video comes from SolarFooterStage sticky layer */
   showSolarVideo?: boolean;
+  /** Hide “Next project” CTA band (contact & who-we-are pages). */
+  hideNextProjectCta?: boolean;
+  /** Less top gap when page ends in a dark band (e.g. /technology); still padded, not flush. */
+  compactTop?: boolean;
 };
 
-export function SiteFooter({ showSolarVideo = true }: SiteFooterProps) {
+export function SiteFooter({
+  showSolarVideo = true,
+  hideNextProjectCta = false,
+  compactTop = false,
+}: SiteFooterProps) {
   const titleParts = ctaSection.title.split(ctaSection.titleHighlight);
-  const { brand, solutionsProducts, company, howWeWork } = footer;
+  const { brand, offerings, company, howWeWork } = footer;
 
   return (
-    <footer className="relative overflow-hidden">
+    <footer className="trevyk-viewport-section relative flex flex-col overflow-hidden">
       {showSolarVideo ? (
-        <FooterSolarVideo className="absolute inset-0" showGrain={false} />
+        <FooterSolarVideo className="absolute inset-0 min-h-full" showGrain={false} />
       ) : null}
 
-      <div className="relative z-10">
-        <PageContainer className="pt-10 md:pt-12">
-          <section
-            id="contact"
-            className="rounded-3xl border border-plum-lavender/25 bg-background/5 p-8 shadow-[0_12px_40px_rgba(15,8,16,0.35)] backdrop-blur-xl ring-1 ring-plum-neutral/10 md:p-10 lg:p-12"
+      <div className="relative z-10 flex flex-1 flex-col">
+        {!hideNextProjectCta ? (
+          <PageContainer
+            className={
+              compactTop ? "pt-8 md:pt-10" : "pt-10 md:pt-12"
+            }
           >
-            <SectionLabel>{ctaSection.label}</SectionLabel>
-            <h2 className="font-display mt-6 text-3xl font-semibold leading-snug text-plum-neutral md:text-[2.65rem]">
-              {titleParts[0]}
-              <span className="text-plum-accent">{ctaSection.titleHighlight}</span>
-              {titleParts[1]}
-            </h2>
-            <p className="mt-5 text-plum-neutral/90">{ctaSection.body}</p>
-            <div className="mt-10 flex flex-wrap items-center gap-6">
-              <PlumLink
-                href={ctaSection.cta.href}
-                className="inline-flex rounded-full bg-plum-accent px-6 py-3 text-sm font-medium text-plum-primary transition hover:bg-plum-neutral"
-              >
-                {ctaSection.cta.label}
-              </PlumLink>
-              <a
-                href={`mailto:${site.email}`}
-                className="font-mono text-sm text-plum-neutral hover:text-plum-accent"
-              >
-                {site.email}
-              </a>
-            </div>
-          </section>
-        </PageContainer>
+            <section
+              id="contact"
+              className="rounded-3xl border border-plum-lavender/25 bg-background/5 p-8 shadow-[0_12px_40px_rgba(15,8,16,0.35)] backdrop-blur-xl ring-1 ring-plum-neutral/10 md:p-10 lg:p-12"
+            >
+              <SectionLabel>{ctaSection.label}</SectionLabel>
+              <h2 className="font-display mt-6 text-3xl font-semibold leading-snug text-plum-neutral md:text-[2.65rem]">
+                {titleParts[0]}
+                <span className="text-plum-accent">{ctaSection.titleHighlight}</span>
+                {titleParts[1]}
+              </h2>
+              <p className="mt-5 text-plum-neutral/90">{ctaSection.body}</p>
+              <div className="mt-10 flex flex-wrap items-center gap-6">
+                <PlumLink
+                  href={ctaSection.cta.href}
+                  className="inline-flex rounded-full bg-plum-accent px-6 py-3 text-sm font-medium text-plum-primary transition hover:bg-plum-neutral"
+                >
+                  {ctaSection.cta.label}
+                </PlumLink>
+                <a
+                  href={`mailto:${site.email}`}
+                  className="font-mono text-sm text-plum-neutral hover:text-plum-accent"
+                >
+                  {site.email}
+                </a>
+              </div>
+            </section>
+          </PageContainer>
+        ) : null}
 
-        <PageContainer className="py-12 md:py-14">
+        <PageContainer
+          className={`py-12 md:py-14${hideNextProjectCta ? " pt-10 md:pt-12" : ""}`}
+        >
           <div className="grid gap-12 pt-12 lg:grid-cols-[minmax(0,1.35fr)_repeat(3,minmax(0,1fr))] lg:gap-10 xl:gap-14">
             <div className="max-w-md">
               <TrevykLogo />
@@ -139,10 +171,10 @@ export function SiteFooter({ showSolarVideo = true }: SiteFooterProps) {
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <PlumLink
-                  href={brand.visionCta.href}
+                  href={brand.workCta.href}
                   className="inline-flex rounded-full border border-plum-neutral/35 px-5 py-2.5 text-sm text-plum-neutral transition hover:border-plum-accent/50 hover:bg-plum-primary/25"
                 >
-                  {brand.visionCta.label}
+                  {brand.workCta.label}
                 </PlumLink>
                 <a
                   href={brand.kiduartCta.href}
@@ -160,10 +192,10 @@ export function SiteFooter({ showSolarVideo = true }: SiteFooterProps) {
 
             <div>
               <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-plum-accent">
-                {solutionsProducts.title}
+                {offerings.title}
               </p>
               <ul className="mt-5 space-y-2.5">
-                {solutionsProducts.links.map((link) => (
+                {offerings.links.map((link) => (
                   <li key={link.label}>
                     <FooterLink
                       href={link.href}
@@ -187,16 +219,24 @@ export function SiteFooter({ showSolarVideo = true }: SiteFooterProps) {
                   </li>
                 ))}
               </ul>
-              <ul className="mt-8 space-y-2 pt-6">
-                {footer.social.map((link) => (
-                  <li key={link.label}>
-                    <FooterLink
-                      href={link.href}
-                      label={link.label}
-                      external={link.href.startsWith("http")}
-                    />
-                  </li>
-                ))}
+              <ul className="mt-8 flex flex-wrap items-center gap-4 pt-6">
+                {footer.social.map((link) => {
+                  const isEmail = link.href.startsWith("mailto:");
+                  const Icon = isEmail ? Mail : Linkedin;
+                  return (
+                    <li key={link.label}>
+                      <a
+                        href={link.href}
+                        target={isEmail ? undefined : "_blank"}
+                        rel={isEmail ? undefined : "noopener noreferrer"}
+                        className="inline-flex items-center justify-center rounded-full border border-plum-neutral/30 p-2.5 text-plum-neutral/90 transition hover:border-plum-accent/50 hover:text-plum-neutral"
+                        aria-label={link.label}
+                      >
+                        <Icon className="h-4 w-4" aria-hidden />
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
 
@@ -219,7 +259,7 @@ export function SiteFooter({ showSolarVideo = true }: SiteFooterProps) {
           </div>
         </PageContainer>
 
-        <section className="relative pt-10 md:pt-14">
+        <section className="relative mt-auto pt-10 md:pt-14">
           <div
             className="pointer-events-none absolute inset-0"
             style={{
@@ -231,23 +271,8 @@ export function SiteFooter({ showSolarVideo = true }: SiteFooterProps) {
           />
 
           <div className="relative z-10">
-            <PageContainer className="pb-6 pt-5">
-              <p
-                className="flex max-w-none justify-start font-display text-[clamp(4rem,4.5vw,5.2rem)] font-bold leading-[1.2] tracking-[0.14em] md:tracking-[0.2em]"
-                aria-hidden
-              >
-                <span
-                  // className="inline-flex gap-6 bg-[linear-gradient(90deg,#9E8C98_0%,#A995A1_22%,#B397AE_52%,#C4ACB4_78%,#D4BEC3_100%)] bg-clip-text text-transparent [-webkit-text-stroke:0.55px_rgba(210,192,200,0.42)] md:gap-10"
-                  className="inline-flex gap-6 bg-[linear-gradient(90deg,#3b0f2c_0%,#652049_22%,#8d5182_52%,#bea7ae_78%,#f3edee_100%)] bg-clip-text text-transparent [-webkit-text-stroke:0.55px_rgba(210,192,200,0.42)] md:gap-10"
-                  style={{
-                    filter:
-                      "drop-shadow(0 1px 0 rgba(15,8,16,0.85)) drop-shadow(0 0 18px rgba(15,8,16,0.35))",
-                  }}
-                >
-                  <span>{wordmarkLine1}</span>
-                  <span>{wordmarkLine2}</span>
-                </span>
-              </p>
+            <PageContainer className="min-w-0 pb-2 pt-6 md:pt-8">
+              <FooterWordmark />
             </PageContainer>
 
             <PageContainer className="pb-6 pt-5">

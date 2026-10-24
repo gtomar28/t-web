@@ -89,7 +89,7 @@ export const GrowthOffer: React.FC = () => {
   return (
     <section
       id="growth-services"
-      className="relative w-full scroll-mt-24 border-t border-[#B9A6D1]/10 bg-background px-4 py-16 sm:px-6 sm:py-24 lg:scroll-mt-28 lg:px-8 lg:pt-20"
+      className="trevyk-viewport-section relative w-full scroll-mt-24 border-t border-[#B9A6D1]/10 bg-background px-4 py-16 sm:px-6 sm:py-24 lg:scroll-mt-28 lg:px-8 lg:py-20"
     >
       <div className="mx-auto max-w-7xl">
         <div className="max-w-3xl">

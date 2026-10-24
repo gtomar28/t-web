@@ -32,7 +32,7 @@ const templatePath = path.join(dist, "index.html");
 
 const NAV: { href: string; label: string }[] = [
   { href: "/", label: "Home" },
-  { href: "/services", label: "Services" },
+  { href: "/what-we-do", label: "What we do" },
   { href: "/ai", label: "AI solutions" },
   { href: "/work/custom-websites", label: "Custom websites" },
   { href: "/work/web-applications", label: "Web applications" },
@@ -45,8 +45,8 @@ const NAV: { href: string; label: string }[] = [
   { href: "/work/ai-for-schools", label: "AI for schools" },
   { href: "/technology", label: "Technology" },
   { href: "/process", label: "Process" },
-  { href: "/about", label: "About" },
-  { href: "/kiduart", label: "Kiduart" },
+  { href: "/who-we-are", label: "Who we are" },
+  { href: "/our-products", label: "Our products" },
   { href: "/contact", label: "Contact" },
   { href: "/sitemap", label: "Site map" },
 ];
@@ -60,7 +60,7 @@ const PAGE_COPY: Record<string, { h1: string; paragraphs: string[] }> = {
       "Kiduart is the school ERP. A new website, web app, or campaign starts at the contact page. Email contact@trevyk.com.",
     ],
   },
-  "/services": {
+  "/what-we-do": {
     h1: "Custom websites, software, and growth services",
     paragraphs: [
       "Websites, web applications, custom software, SEO, digital marketing, social media, video, and scripts for startups and local businesses. Starter plans are priced with early budgets in mind. Kiduart School ERP stays the product lane.",
@@ -92,14 +92,14 @@ const PAGE_COPY: Record<string, { h1: string; paragraphs: string[] }> = {
       "Scope is written before the first screen. You can see what is in the first release and what waits.",
     ],
   },
-  "/about": {
-    h1: "Turning Vision Into Progress",
+  "/who-we-are": {
+    h1: "Who we are — Turning Vision Into Progress",
     paragraphs: [
-      "Trevyk Technologies designs and delivers technology products and engineered solutions, including Kiduart, alongside custom websites, web applications, and the growth work around them: SEO, campaigns, social pages, and video.",
-      "Based in Noida. We publish only what we can actually deliver, and we do not invent client counts.",
+      "Trevyk Technologies is a Noida practice for Kiduart, custom websites, web applications, software, SEO, campaigns, social pages, and video.",
+      "Our purpose, how we think and work, what defines us, and the commitments we publish — honest claims, no invented client counts.",
     ],
   },
-  "/kiduart": {
+  "/our-products": {
     h1: "School ERP built for the Indian school year",
     paragraphs: [
       "Kiduart is Trevyk’s cloud school management platform: admissions, fees, attendance, exams, and parent updates. A school that also needs a public website or campaign can ask for that separately.",
@@ -219,7 +219,7 @@ function bodyFor(route: string): string {
     : "";
 
   const serviceList =
-    route === "/services"
+    route === "/what-we-do"
       ? `<h2>Catalogue</h2>${textList(
           SERVICES_DATA.map((service) => `${service.title}. ${service.tagline}`),
         )}<p><a href="/contact">Ask for a starter plan</a></p>`
@@ -264,7 +264,7 @@ function render(template: string, route: string): string {
   const guide = GUIDES.find((item) => route === `/work/${item.slug}`);
   const routeImages: Record<string, string> = {
     "/ai": "/images/ai-hub-systems.jpg",
-    "/kiduart": "/images/studio-kiduart.jpg",
+    "/our-products": "/images/studio-kiduart.jpg",
   };
   const image = absoluteUrl(
     guide?.image || routeImages[route] || "/trevyk-logo-on-dark.png",

@@ -89,7 +89,7 @@ export const RouteLoader: React.FC<RouteLoaderProps> = ({
         autoPlay
         loop
         preload="auto"
-        // @ts-expect-error React 19 fetchPriority on media
+        // @ts-expect-error fetchPriority on media
         fetchPriority="high"
       />
     </div>

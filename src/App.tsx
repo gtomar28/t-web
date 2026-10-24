@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useRef, useCallback, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef, useCallback, Suspense } from 'react';
 import { BrowserRouter, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import Lenis from 'lenis';
@@ -13,19 +13,18 @@ import { SiteFooter } from './components/plum/layout/SiteFooter';
 import { BrandGradientBar } from './components/BrandGradientBar';
 import { ArchitectureModal } from './components/ArchitectureModal';
 import { GeminiChatbot } from './components/GeminiChatbot';
+import { WhatsAppFloatingButton } from './components/WhatsAppFloatingButton';
 import { SEOManager } from './components/SEOManager';
 import { Analytics } from './components/Analytics';
-import { Breadcrumbs } from './components/Breadcrumbs';
 import { PageTransition } from './components/PageTransition';
 import { AppRoutes } from './components/AppRoutes';
 import { RouteLoader } from './components/RouteLoader';
 import { useRouteTransitionOverlay } from './hooks/useRouteTransitionOverlay';
 import { trackChatOpen } from './utils/analytics';
 import { setRouteOverlayPathname } from './utils/routeTransitionOverlay';
-
-const Global3DCanvas = lazy(() =>
-  import('./components/3d/Global3DCanvas').then((m) => ({ default: m.Global3DCanvas })),
-);
+import { dismissTrevykBoot } from './utils/heroVideoPreload';
+import { soundEngine } from './utils/audioEngine';
+import { isOurProductsPath, isWhoWeArePath } from './config/site';
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -54,24 +53,25 @@ function ScrollToTop({ lenisRef }: { lenisRef: React.RefObject<Lenis | null> }) 
 function MainAppContent() {
   const location = useLocation();
   const pathname = location.pathname;
+  const hideFooterNextProject =
+    pathname === "/contact" ||
+    isWhoWeArePath(pathname) ||
+    isOurProductsPath(pathname);
+  const compactFooterTop = pathname === "/technology";
   const { overlayVisible } = useRouteTransitionOverlay(pathname);
 
   useLayoutEffect(() => {
     setRouteOverlayPathname(pathname);
   }, [pathname]);
 
-  useEffect(() => {
-    if (overlayVisible) {
-      setScene3dEnabled(false);
-      return;
-    }
-    const t = window.setTimeout(() => setScene3dEnabled(true), 480);
-    return () => window.clearTimeout(t);
+  useLayoutEffect(() => {
+    if (!overlayVisible) dismissTrevykBoot();
   }, [overlayVisible]);
+
   const [settings, setSettings] = useState<SiteSettings>({
     reducedMotion: false,
     highQuality3D: true,
-    soundEnabled: false,
+    soundEnabled: true,
   });
 
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -83,8 +83,6 @@ function MainAppContent() {
   const [hoveredCube, setHoveredCube] = useState<number | null>(null);
 
   const lenisRef = useRef<Lenis | null>(null);
-  const [mount3d, setMount3d] = useState(false);
-  const [scene3dEnabled, setScene3dEnabled] = useState(false);
 
   const openChatWithPrompt = (prompt?: string) => {
     setChatInitialPrompt(prompt);
@@ -96,6 +94,10 @@ function MainAppContent() {
     setSelectedCubeIndex(cubeIndex !== undefined ? cubeIndex : null);
     setModalOpen(true);
   };
+
+  useEffect(() => {
+    soundEngine.setEnabled(settings.soundEnabled, { feedback: false });
+  }, [settings.soundEnabled]);
 
   // Check system prefers-reduced-motion
   useEffect(() => {
@@ -162,21 +164,6 @@ function MainAppContent() {
     };
   }, [settings.reducedMotion]);
 
-  // Defer WebGL until after first paint so navigation and Lighthouse aren't blocked by three.js.
-  useEffect(() => {
-    if (settings.reducedMotion) return;
-    const start = () => setMount3d(true);
-    const isNarrow =
-      typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches;
-    const timeout = isNarrow ? 4500 : 2200;
-    const fallbackMs = isNarrow ? 3200 : 1600;
-    if (typeof window.requestIdleCallback === 'function') {
-      const id = window.requestIdleCallback(start, { timeout });
-      return () => window.cancelIdleCallback(id);
-    }
-    const timer = window.setTimeout(start, fallbackMs);
-    return () => window.clearTimeout(timer);
-  }, [settings.reducedMotion]);
   useEffect(() => {
     const lenis = lenisRef.current;
     if (!lenis) return;
@@ -204,7 +191,13 @@ function MainAppContent() {
   };
 
   return (
-    <div id="trevyk-app" className="relative min-h-screen max-w-[100vw] bg-[#2A1830] text-[#F8F6FB]">
+    <div id="trevyk-app" className="relative min-h-screen max-w-[100vw] bg-[#1a0f18] text-[#F8F6FB]">
+      {pathname !== "/" && !overlayVisible && (
+        <div
+          className="trevyk-checkered-bg pointer-events-none fixed inset-0 z-0"
+          aria-hidden
+        />
+      )}
       <ScrollToTop lenisRef={lenisRef} />
       <SEOManager />
       <Analytics />
@@ -215,24 +208,7 @@ function MainAppContent() {
 
       {!overlayVisible && <Cursor reducedMotion={settings.reducedMotion} />}
 
-      <RouteLoader
-        visible={overlayVisible}
-        reducedMotion={settings.reducedMotion}
-      />
-
-      {/* WebGL companion — hidden during route loader (not the logo MP4) */}
-      {mount3d && scene3dEnabled && !overlayVisible && (
-      <Suspense fallback={null}>
-        <Global3DCanvas
-          scrollProgress={scrollProgress}
-          mousePos={mousePos}
-          settings={settings}
-          hoveredCube={hoveredCube}
-          onCubeHover={setHoveredCube}
-          currentPath={pathname}
-        />
-      </Suspense>
-      )}
+      <RouteLoader visible={overlayVisible} reducedMotion={settings.reducedMotion} />
 
       {!overlayVisible && (
         <Navbar
@@ -247,7 +223,6 @@ function MainAppContent() {
         className={`relative z-10 min-h-screen${overlayVisible ? " invisible" : ""}`}
         aria-hidden={overlayVisible}
       >
-        <Breadcrumbs />
         <AnimatePresence mode="sync">
           <PageTransition
             key={pathname}
@@ -269,14 +244,18 @@ function MainAppContent() {
         </AnimatePresence>
       </main>
 
-      {/* 7. Plum footer from maansuk-web — sticky solar + testimonials on home only */}
-      {location.pathname === "/" ? (
+      {/* 7. Plum footer — “Next project” band hidden on contact & who-we-are */}
+      {pathname === "/" ? (
         <div className="relative z-[35]">
           <SolarFooterStage />
         </div>
       ) : (
         <div className="relative z-[35]">
-          <SiteFooter showSolarVideo />
+          <SiteFooter
+            showSolarVideo
+            hideNextProjectCta={hideFooterNextProject}
+            compactTop={compactFooterTop}
+          />
         </div>
       )}
 
@@ -290,6 +269,8 @@ function MainAppContent() {
           setHoveredCube(index);
         }}
       />
+
+      <WhatsAppFloatingButton />
 
       {/* 9. Trevyk AI Assistant */}
       <GeminiChatbot

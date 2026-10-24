@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation, type Location } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, type Location } from "react-router-dom";
 import { HomePage } from "../pages/HomePage";
 import { SiteSettings } from "../types";
 import { lazy, useLayoutEffect, type ComponentType } from "react";
@@ -10,7 +10,11 @@ function withRouteReady<P extends object>(Component: ComponentType<P>) {
     useLayoutEffect(() => {
       markRouteContentReadyForPath(pathname);
     }, [pathname]);
-    return <Component {...props} />;
+    return (
+      <div data-trevyk-route-page={pathname}>
+        <Component {...props} />
+      </div>
+    );
   };
 }
 
@@ -90,8 +94,9 @@ export function AppRoutes({
           />
         }
       />
+      <Route path="/services" element={<Navigate to="/what-we-do" replace />} />
       <Route
-        path="/services"
+        path="/what-we-do"
         element={
           <ServicesPage
             settings={settings}
@@ -110,10 +115,12 @@ export function AppRoutes({
           />
         }
       />
-      <Route path="/kiduart" element={<KiduartPage settings={settings} />} />
+      <Route path="/kiduart" element={<Navigate to="/our-products" replace />} />
+      <Route path="/our-products" element={<KiduartPage settings={settings} />} />
       <Route path="/process" element={<ProcessPage settings={settings} />} />
+      <Route path="/about" element={<Navigate to="/who-we-are" replace />} />
       <Route
-        path="/about"
+        path="/who-we-are"
         element={
           <AboutPage
             settings={settings}

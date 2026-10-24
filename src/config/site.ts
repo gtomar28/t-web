@@ -61,17 +61,36 @@ export const SITE_TAGLINE = "Turning Vision Into Progress.";
 export const KIDUART_URL = "https://kiduart.com";
 export const KIDUART_ABOUT_URL = "https://kiduart.com/about";
 
+/** Services / capabilities page (legacy `/services` redirects here). */
+export const WHAT_WE_DO_PATH = "/what-we-do" as const;
+
+/** Products overview (legacy `/kiduart` redirects here). */
+export const OUR_PRODUCTS_PATH = "/our-products" as const;
+
 export const SITE_ROUTES = [
   "/",
-  "/services",
+  WHAT_WE_DO_PATH,
   "/ai",
   "/technology",
-  "/kiduart",
+  OUR_PRODUCTS_PATH,
   "/process",
-  "/about",
+  "/who-we-are",
   "/contact",
   "/sitemap",
 ] as const;
+
+/** Who we are page (legacy `/about` redirects here). */
+export function isWhoWeArePath(pathname: string): boolean {
+  return pathname === "/who-we-are" || pathname === "/about";
+}
+
+export function isWhatWeDoPath(pathname: string): boolean {
+  return pathname === WHAT_WE_DO_PATH || pathname === "/services";
+}
+
+export function isOurProductsPath(pathname: string): boolean {
+  return pathname === OUR_PRODUCTS_PATH || pathname === "/kiduart";
+}
 
 export function absoluteUrl(path: string): string {
   if (path.startsWith("http")) return path;

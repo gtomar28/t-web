@@ -161,7 +161,7 @@ export const Hero: React.FC<HeroProps> = ({
               </MagneticButton>
 
               <Link
-                to="/kiduart"
+                to="/our-products"
                 onClick={() => soundEngine.playClick("soft")}
                 className="inline-flex items-center space-x-2 px-5 py-3 rounded-full text-xs sm:text-sm font-heading font-semibold text-[#F8F6FB] bg-[#1E1024] border border-[#B9A6D1]/50 hover:border-[#E8A9C2]/75 transition-all interactive-target"
               >
@@ -169,7 +169,7 @@ export const Hero: React.FC<HeroProps> = ({
               </Link>
 
               <Link
-                to="/services"
+                to="/what-we-do"
                 onClick={() => soundEngine.playClick("soft")}
                 className="inline-flex items-center text-xs font-mono-accent text-[#B9A6D1] hover:text-[#E8A9C2] transition-colors px-2 py-2"
               >

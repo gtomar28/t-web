@@ -62,7 +62,7 @@ export const ContactTeaser: React.FC<ContactTeaserProps> = ({
   return (
     <section
       id="contact-teaser"
-      className="relative py-14 sm:py-20 px-4 sm:px-6 lg:px-8"
+      className="trevyk-viewport-section relative px-4 sm:px-6 lg:px-8"
     >
       <ScrollReveal
         className="max-w-7xl mx-auto"
