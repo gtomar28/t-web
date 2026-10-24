@@ -33,8 +33,8 @@ export function prefetchCommonRoutesIdle(): void {
     prefetchRoute("/contact");
   };
   if (typeof requestIdleCallback !== "undefined") {
-    requestIdleCallback(run, { timeout: 4000 });
+    requestIdleCallback(run, { timeout: 12000 });
   } else {
-    window.setTimeout(run, 2500);
+    window.setTimeout(run, 8000);
   }
 }

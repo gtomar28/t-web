@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { entryLoader, media } from "../config/media";
 import { ROUTE_LOADER_ID } from "../utils/routeTransitionOverlay";
 
@@ -30,21 +30,24 @@ export const RouteLoader: React.FC<RouteLoaderProps> = ({
   reducedMotion = false,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [loaderVideoSrc, setLoaderVideoSrc] = useState<string | undefined>();
   const bg = entryLoader.background;
   const videoSizePct = `${entryLoader.videoViewportRatio * 100}%`;
 
   useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    applyLoaderVideoSettings(v, false);
-  }, []);
+    if (!visible) {
+      setLoaderVideoSrc(undefined);
+      return;
+    }
+    setLoaderVideoSrc(media.entryLogoAnimation);
+  }, [visible]);
 
   useEffect(() => {
     const v = videoRef.current;
-    if (!v || !visible) return;
+    if (!v || !loaderVideoSrc) return;
     restartZoomAnimation(v);
     applyLoaderVideoSettings(v, true);
-  }, [visible]);
+  }, [loaderVideoSrc]);
 
   if (reducedMotion) {
     return (
@@ -83,12 +86,12 @@ export const RouteLoader: React.FC<RouteLoaderProps> = ({
           height: videoSizePct,
           animationDuration: `${entryLoader.zoomDurationMs}ms`,
         }}
-        src={media.entryLogoAnimation}
+        src={loaderVideoSrc}
         muted
         playsInline
-        autoPlay
+        autoPlay={Boolean(loaderVideoSrc)}
         loop
-        preload={visible ? "auto" : "metadata"}
+        preload="none"
       />
     </div>
   );

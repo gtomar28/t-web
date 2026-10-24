@@ -1,0 +1,17 @@
+# ----------------------------------------
+# Events: Event name
+# Account: Trevyk
+# Property: Trevyk Technologies
+# ----------------------------------------
+# 
+# All Users
+# Start date: 20261022
+# End date: 20261024
+Event name,Event count,Total users,Event count per active user,Total revenue
+page_view,988,11,98.8,0
+scroll,194,8,24.25,0
+user_engagement,91,9,13,0
+session_start,27,13,2.7,0
+click,5,2,2.5,0
+first_visit,3,3,1,0
+chat_open,1,1,1,0

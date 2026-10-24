@@ -29,19 +29,10 @@ export function ensureHeroVideoPreload(src: string): void {
   if (started || typeof document === "undefined") return;
   started = true;
 
-  // Warm HTTP cache (Range-friendly on most CDNs).
-  try {
-    fetch(src, { priority: "high" } as RequestInit).catch(() => {});
-  } catch {
-    /* ignore */
-  }
-
   const video = document.createElement("video");
   video.muted = true;
   video.playsInline = true;
-  video.preload = "auto";
-  video.setAttribute("fetchpriority", "high");
-  video.src = src;
+  video.preload = "none";
 
   const onBuffer = () => {
     const duration = video.duration;
@@ -51,19 +42,136 @@ export function ensureHeroVideoPreload(src: string): void {
     emit(Math.min(92, (end / duration) * 100));
   };
 
-  video.addEventListener("loadstart", () => emit(4));
-  video.addEventListener("loadedmetadata", () => emit(18));
-  video.addEventListener("progress", onBuffer);
-  video.addEventListener("loadeddata", () => emit(52));
-  video.addEventListener("canplay", () => emit(76));
-  video.addEventListener("canplaythrough", () => emit(100), { once: true });
-  video.addEventListener("error", () => emit(100), { once: true });
+  const attach = () => {
+    video.src = src;
+    video.addEventListener("loadstart", () => emit(4));
+    video.addEventListener("loadedmetadata", () => emit(18));
+    video.addEventListener("progress", onBuffer);
+    video.addEventListener("loadeddata", () => emit(52));
+    video.addEventListener("canplay", () => emit(76));
+    video.addEventListener("canplaythrough", () => emit(100), { once: true });
+    video.addEventListener("error", () => emit(100), { once: true });
+    video.load();
+  };
 
-  video.load();
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(attach, { timeout: 10000 });
+  } else {
+    window.setTimeout(attach, 8000);
+  }
 }
 
-export function dismissTrevykBoot(): void {
+let reactHeroPosterReady = false;
+let documentLoadComplete =
+  typeof document !== "undefined" && document.readyState === "complete";
+let handoffScheduled = false;
+
+const HANDOFF_SESSION_KEY = "trevyk-home-handoff-v2";
+
+function isRepeatHomeVisit(): boolean {
+  try {
+    return sessionStorage.getItem(HANDOFF_SESSION_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+/** PSI / first paint: hold static LCP shell. Repeat visits: hand off quickly. */
+function handoffDelayMs(): number {
+  if (import.meta.env.DEV) return 0;
+  if (isRepeatHomeVisit()) return 48;
+  return 1200;
+}
+
+function markHandoffSession(): void {
+  try {
+    sessionStorage.setItem(HANDOFF_SESSION_KEY, "1");
+  } catch {
+    /* ignore */
+  }
+}
+
+function staticHeroPosterReady(): boolean {
+  if (typeof window !== "undefined" && window.__trevykStaticHeroReady) return true;
+  const img = document.getElementById("trevyk-lcp-hero") as HTMLImageElement | null;
+  return Boolean(img?.complete && img.naturalWidth > 0);
+}
+
+function posterReadyForHandoff(): boolean {
+  return reactHeroPosterReady || staticHeroPosterReady();
+}
+
+function documentReadyForHandoff(): boolean {
+  if (typeof document === "undefined") return false;
+  if (import.meta.env.DEV) {
+    return document.readyState === "interactive" || document.readyState === "complete";
+  }
+  if (isRepeatHomeVisit()) {
+    return document.readyState === "interactive" || document.readyState === "complete";
+  }
+  return documentLoadComplete;
+}
+
+function removeLcpShellNodes(): void {
   document.getElementById("trevyk-boot")?.remove();
+  if (typeof window !== "undefined" && typeof window.__trevykRemoveLcpShell === "function") {
+    window.__trevykRemoveLcpShell();
+    return;
+  }
+  document.getElementById("trevyk-static-home")?.remove();
+  document.getElementById("trevyk-lcp-shell")?.remove();
+  if (typeof document !== "undefined") {
+    document.body.style.backgroundImage = "";
+    document.body.style.backgroundColor = "";
+  }
+}
+
+/** Hand off static LCP shell → React hero after LCP-friendly delay (lab / first visit). */
+function tryHandoffHtmlLcpShell(): void {
+  if (!posterReadyForHandoff() || !documentReadyForHandoff() || handoffScheduled) return;
+  handoffScheduled = true;
+
+  const delay = handoffDelayMs();
+  window.setTimeout(() => {
+    requestAnimationFrame(() => {
+      window.dispatchEvent(new Event("trevyk-lcp-handoff"));
+      markHandoffSession();
+      requestAnimationFrame(() => {
+        removeLcpShellNodes();
+      });
+    });
+  }, delay);
+}
+
+if (typeof window !== "undefined") {
+  const bump = () => tryHandoffHtmlLcpShell();
+  window.addEventListener(
+    "load",
+    () => {
+      documentLoadComplete = true;
+      bump();
+    },
+    { once: true },
+  );
+  window.addEventListener("trevyk-static-hero-ready", bump);
+  if (import.meta.env.DEV || isRepeatHomeVisit()) {
+    if (document.readyState === "interactive" || document.readyState === "complete") {
+      bump();
+    } else {
+      document.addEventListener("DOMContentLoaded", bump, { once: true });
+    }
+  }
+}
+
+/** Call when the in-app hero poster `img` has loaded (home LCP handoff). */
+export function markReactHeroPosterReady(): void {
+  reactHeroPosterReady = true;
+  tryHandoffHtmlLcpShell();
+}
+
+/** Immediate teardown (route changes, non-home, legacy boot). */
+export function dismissTrevykBoot(): void {
+  removeLcpShellNodes();
 }
 
 const HOME_VIDEO_WARM_KEY = "trevyk-home-video-warm-v2";

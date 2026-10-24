@@ -6,6 +6,10 @@ export const media = {
   /** LCP still — extracted from hero video; video loads after first paint. */
   heroOfficePoster: "/images/hero-office-poster.jpg",
   heroOfficePoster640: "/images/hero-office-poster-640.jpg",
+  heroOfficePosterWebp: "/images/hero-office-poster.webp",
+  heroOfficePoster640Webp: "/images/hero-office-poster-640.webp",
+  homeMidWaveWebp: "/images/futuristic-purple-wave.webp",
+  homeMidWaveJpg: "/images/futuristic-purple-wave-1920.jpg",
   /** How we work — full-section rotating earth background */
   processGlobe: "/videos/process-globe-bg.mp4",
   footerSolar: "/videos/solar.mp4",

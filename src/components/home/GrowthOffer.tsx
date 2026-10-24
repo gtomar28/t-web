@@ -9,6 +9,8 @@ import {
   Megaphone,
   Share2,
   Clapperboard,
+  Bot,
+  BookOpen,
   type LucideIcon,
 } from "lucide-react";
 type GrowthCard = {
@@ -83,6 +85,28 @@ const CARDS: GrowthCard[] = [
     href: "/work/video-scripts",
     icon: Clapperboard,
   },
+  {
+    imageSlug: "ai-agents",
+    imageLabel: "AI agent workflow with tools and human review checkpoints",
+    kicker: "AI agents",
+    title: "One workflow, not a chat toy",
+    caption:
+      "Scoped agents with approved tools, human gates, and audit logs for real ops work.",
+    bullets: ["Single workflow in v1", "Human checkpoints on risk"],
+    href: "/work/ai-agents",
+    icon: Bot,
+  },
+  {
+    imageSlug: "rag-knowledge",
+    imageLabel: "Knowledge assistant citing internal documents and sources",
+    kicker: "Knowledge",
+    title: "Answers that cite your docs",
+    caption:
+      "RAG over your corpus with permissions, citations, and refusals when context is thin.",
+    bullets: ["Source-linked replies", "Refresh when docs change"],
+    href: "/work/rag-knowledge-assistants",
+    icon: BookOpen,
+  },
 ];
 
 export const GrowthOffer: React.FC = () => {
@@ -101,8 +125,9 @@ export const GrowthOffer: React.FC = () => {
           </h2>
           <p className="mt-5 text-base leading-relaxed text-[#E7E1F0] sm:text-lg">
             Trevyk builds custom websites, web applications, and custom software,
-            then the growth work around them: SEO, campaigns, social media,
-            video, and scripts. Starter plans are scoped for early budgets.
+            then the growth work around them: SEO, campaigns, social, video,
+            scripts, and AI—agents and knowledge assistants when you are ready.
+            Starter plans are scoped for early budgets.
           </p>
         </div>
 
@@ -117,17 +142,24 @@ export const GrowthOffer: React.FC = () => {
               >
                 <article className="flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-[#B9A6D1]/30 bg-gradient-to-b from-[#1E1024]/95 via-[#1A0D20]/98 to-[#160A1C] p-3 shadow-[0_18px_44px_rgba(0,0,0,0.38)] transition-all duration-300 group-hover:border-[#E8A9C2]/40 group-hover:shadow-[0_22px_52px_rgba(107,74,135,0.28)] sm:p-3.5">
                   <div className="growth-card-photo relative aspect-[4/3] overflow-hidden rounded-[1.2rem] ring-1 ring-[#85627e]/45">
-                    <img
-                      src={`/images/growth-card-${card.imageSlug}-plum.jpg`}
-                      srcSet={`/images/growth-card-${card.imageSlug}-plum-640.jpg 640w, /images/growth-card-${card.imageSlug}-plum.jpg 1200w`}
-                      sizes="(max-width: 640px) 92vw, (max-width: 1024px) 45vw, (max-width: 1280px) 30vw, 22vw"
-                      alt={card.imageLabel}
-                      width={1200}
-                      height={900}
-                      loading="lazy"
-                      decoding="async"
-                      className="growth-card-photo__img h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                    />
+                    <picture>
+                      <source
+                        type="image/webp"
+                        srcSet={`/images/growth-card-${card.imageSlug}-plum-640.webp 640w, /images/growth-card-${card.imageSlug}-plum.webp 1200w`}
+                        sizes="(max-width: 640px) 92vw, (max-width: 1024px) 45vw, (max-width: 1280px) 30vw, 22vw"
+                      />
+                      <img
+                        src={`/images/growth-card-${card.imageSlug}-plum.jpg`}
+                        srcSet={`/images/growth-card-${card.imageSlug}-plum-640.jpg 640w, /images/growth-card-${card.imageSlug}-plum.jpg 1200w`}
+                        sizes="(max-width: 640px) 92vw, (max-width: 1024px) 45vw, (max-width: 1280px) 30vw, 22vw"
+                        alt={card.imageLabel}
+                        width={1200}
+                        height={900}
+                        loading="lazy"
+                        decoding="async"
+                        className="growth-card-photo__img h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      />
+                    </picture>
                     <div
                       className="growth-card-photo__edge pointer-events-none absolute inset-0"
                       aria-hidden

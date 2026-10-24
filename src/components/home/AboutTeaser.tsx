@@ -98,7 +98,7 @@ export const AboutTeaser: React.FC<AboutTeaserProps> = ({ settings }) => {
           </ScrollReveal>
 
           <ScrollReveal
-            className="lg:col-span-6 xl:col-span-5f"
+            className="lg:col-span-6 xl:col-span-5"
             variant="right"
             reducedMotion={settings.reducedMotion}
           >

@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://www.trevyk.in/</loc><lastmod>2026-10-13</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://www.trevyk.in/what-we-do</loc><lastmod>2026-10-22</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.trevyk.in/ai</loc><lastmod>2026-10-13</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.trevyk.in/work/custom-websites</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://www.trevyk.in/work/web-applications</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://www.trevyk.in/work/seo</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://www.trevyk.in/work/digital-marketing</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.trevyk.in/work/social-media</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.trevyk.in/work/video-scripts</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.trevyk.in/work/ai-agents</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.trevyk.in/work/rag-knowledge-assistants</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.trevyk.in/work/ai-for-schools</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.trevyk.in/technology</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.trevyk.in/process</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.trevyk.in/who-we-are</loc><lastmod>2026-10-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.trevyk.in/our-products</loc><lastmod>2026-10-22</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.trevyk.in/contact</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://www.trevyk.in/sitemap</loc><lastmod>2026-10-13</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.trevyk.in/</loc><lastmod>2026-10-24</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://www.trevyk.in/what-we-do</loc><lastmod>2026-10-24</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.trevyk.in/ai</loc><lastmod>2026-10-24</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.trevyk.in/work/custom-websites</loc><lastmod>2026-10-24</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.trevyk.in/work/web-applications</loc><lastmod>2026-10-24</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.trevyk.in/work/seo</loc><lastmod>2026-10-24</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.trevyk.in/work/digital-marketing</loc><lastmod>2026-10-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.trevyk.in/work/social-media</loc><lastmod>2026-10-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.trevyk.in/work/video-scripts</loc><lastmod>2026-10-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.trevyk.in/work/ai-agents</loc><lastmod>2026-10-24</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.trevyk.in/work/rag-knowledge-assistants</loc><lastmod>2026-10-24</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.trevyk.in/work/ai-for-schools</loc><lastmod>2026-10-24</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.trevyk.in/technology</loc><lastmod>2026-10-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.trevyk.in/process</loc><lastmod>2026-10-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.trevyk.in/who-we-are</loc><lastmod>2026-10-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.trevyk.in/our-products</loc><lastmod>2026-10-24</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.trevyk.in/contact</loc><lastmod>2026-10-24</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.trevyk.in/sitemap</loc><lastmod>2026-10-24</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
 </urlset>

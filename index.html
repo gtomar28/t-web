@@ -49,54 +49,27 @@
     <link rel="shortcut icon" href="/favicon.png" />
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 
-    <!-- GA4 in the document so Google can see the tag (SPA-only inject was invisible to their checker). -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CH828R29RV" id="ga4-gtag"></script>
+    <!-- GA4 stub in HTML for tag checkers; network load waits until after first paint (see body script). -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       window.gtag = window.gtag || gtag;
-      gtag('js', new Date());
-      gtag('config', 'G-CH828R29RV', { anonymize_ip: true, send_page_view: false });
     </script>
 
-    <!-- LCP: discover logo from the document ASAP -->
-    <link
-      rel="preload"
-      as="image"
-      href="/trevyk-logo-on-dark.png"
-      fetchpriority="high"
-    />
-    <link
-      rel="preload"
-      as="image"
-      href="/images/hero-office-poster-640.jpg"
-      imagesrcset="/images/hero-office-poster-640.jpg 640w, /images/hero-office-poster.jpg 1920w"
-      imagesizes="100vw"
-      media="(max-width: 768px)"
-      fetchpriority="high"
-    />
-    <link
-      rel="preload"
-      as="image"
-      href="/images/hero-office-poster.jpg"
-      media="(min-width: 769px)"
-      fetchpriority="high"
-    />
+    <!-- Fonts: preconnect only in head (stylesheet is non-blocking — see trevykLoadFonts). -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Non-blocking Google Fonts (swap after load) -->
+
+    <!-- LCP: hero still only (navbar logo must not compete for bandwidth or LCP). -->
     <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-      media="print"
-      onload="this.media='all'"
+      rel="preload"
+      as="image"
+      href="/images/hero-office-poster-640.webp"
+      type="image/webp"
+      imagesrcset="/images/hero-office-poster-640.webp 640w, /images/hero-office-poster.webp 1920w"
+      imagesizes="100vw"
+      fetchpriority="high"
     />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-      />
-    </noscript>
 
     <!--
       Critical first-paint CSS (no external dependency):
@@ -106,22 +79,157 @@
     <style id="trevyk-boot-css">
       html,
       body {
-        background: #2a1830;
         margin: 0;
       }
-      #trevyk-boot {
+      body {
+        background-color: #0f0810;
+        background-image: url("/images/hero-office-poster-640.webp");
+        background-size: cover;
+        background-position: 50% 42%;
+        background-repeat: no-repeat;
+      }
+      @media (min-width: 769px) {
+        body {
+          background-image: url("/images/hero-office-poster.webp");
+        }
+      }
+      html.trevyk-no-static-home #trevyk-static-home {
+        display: none !important;
+      }
+      .trevyk-static-home {
         position: fixed;
         inset: 0;
-        z-index: 40;
+        z-index: 39;
+        overflow: hidden;
+        background: #0f0810;
+        color: #f8f6fb;
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      }
+      .trevyk-static-home__media {
+        position: absolute;
+        inset: 0;
+      }
+      .trevyk-static-home__media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 50% 42%;
+      }
+      .trevyk-static-home__gradient {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            90deg,
+            rgba(26, 15, 24, 0.92) 0%,
+            rgba(26, 15, 24, 0.78) 38%,
+            rgba(26, 15, 24, 0.35) 58%,
+            transparent 78%
+          ),
+          linear-gradient(
+            180deg,
+            rgba(15, 8, 16, 0.55) 0%,
+            transparent 38%,
+            rgba(15, 8, 16, 0.72) 100%
+          );
+        pointer-events: none;
+      }
+      /* Match HeroScroll + PageContainer (max-w-7xl, px-5/md:px-8, centered). */
+      .trevyk-static-home__stage {
+        position: relative;
+        z-index: 2;
+        box-sizing: border-box;
         display: flex;
         align-items: center;
-        justify-content: center;
-        background: #2a1830;
-        color: #f8f6fb;
+        min-height: 100svh;
+        min-height: 100dvh;
+        padding: 4.5rem 0 3.5rem;
+        pointer-events: none;
       }
-      #trevyk-boot img {
-        width: min(200px, 55vw);
-        height: auto;
+      @media (min-width: 768px) {
+        .trevyk-static-home__stage {
+          padding: 6rem 0 4rem;
+        }
+      }
+      .trevyk-static-home__container {
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 80rem;
+        margin: 0 auto;
+        padding: 0 1.25rem;
+      }
+      @media (min-width: 768px) {
+        .trevyk-static-home__container {
+          padding: 0 2rem;
+        }
+      }
+      .trevyk-static-home__content {
+        max-width: 36rem;
+        pointer-events: none;
+      }
+      @keyframes trevyk-skeleton-shimmer {
+        0% {
+          background-position: 100% 0;
+        }
+        100% {
+          background-position: -100% 0;
+        }
+      }
+      .trevyk-skeleton-bar {
+        border-radius: 0.5rem;
+        background: linear-gradient(
+          105deg,
+          rgba(107, 74, 135, 0.22) 0%,
+          rgba(185, 166, 209, 0.2) 45%,
+          rgba(107, 74, 135, 0.22) 90%
+        );
+        background-size: 220% 100%;
+        animation: trevyk-skeleton-shimmer 2.1s ease-in-out infinite;
+      }
+      .trevyk-skeleton-bar--pill {
+        border-radius: 9999px;
+      }
+      .trevyk-skeleton-title {
+        margin-top: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .trevyk-skeleton-title .trevyk-skeleton-bar:nth-child(1) {
+        height: 2.25rem;
+        width: 92%;
+      }
+      .trevyk-skeleton-title .trevyk-skeleton-bar:nth-child(2) {
+        height: 2.25rem;
+        width: 72%;
+      }
+      .trevyk-skeleton-title .trevyk-skeleton-bar:nth-child(3) {
+        height: 2.25rem;
+        width: 38%;
+      }
+      @media (min-width: 768px) {
+        .trevyk-skeleton-title .trevyk-skeleton-bar {
+          height: 2.75rem;
+        }
+      }
+      .trevyk-skeleton-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 0.625rem;
+        margin-top: 1.5rem;
+      }
+      .trevyk-skeleton-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 2rem;
+      }
+      #root {
+        opacity: 0;
+        pointer-events: none;
+      }
+      html.trevyk-app-ready #root {
+        opacity: 1;
+        pointer-events: auto;
       }
       .trevyk-seo-shell {
         position: absolute !important;
@@ -137,7 +245,7 @@
     </style>
     <noscript>
       <style>
-        #trevyk-boot {
+        #trevyk-static-home {
           display: none !important;
         }
         .trevyk-seo-shell {
@@ -159,9 +267,66 @@
   <body
     class="bg-[#2A1830] text-[#F8F6FB] antialiased selection:bg-[#E8A9C2] selection:text-[#241428] overflow-x-hidden"
   >
-    <div id="trevyk-boot" aria-busy="true" aria-live="polite" aria-label="Loading Trevyk Technologies">
-      <img src="/trevyk-logo-on-dark.png" width="200" height="200" alt="" decoding="async" />
+    <script>
+      (function () {
+        var p = location.pathname.replace(/\/$/, "") || "/";
+        if (p !== "/") {
+          document.documentElement.classList.add("trevyk-no-static-home", "trevyk-app-ready");
+        }
+      })();
+    </script>
+    <!-- trevyk-static-home-start -->
+    <div id="trevyk-static-home" class="trevyk-static-home">
+      <div class="trevyk-static-home__media" aria-hidden="true">
+        <picture>
+          <source
+            type="image/webp"
+            srcset="/images/hero-office-poster-640.webp 640w, /images/hero-office-poster.webp 1920w"
+            sizes="100vw"
+          />
+          <img
+            id="trevyk-lcp-hero"
+            src="/images/hero-office-poster-640.jpg"
+            srcset="/images/hero-office-poster-640.jpg 640w, /images/hero-office-poster.jpg 1920w"
+            sizes="100vw"
+            alt=""
+            width="640"
+            height="360"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </picture>
+      </div>
+      <div class="trevyk-static-home__gradient" aria-hidden="true"></div>
+      <div class="trevyk-static-home__stage">
+        <div class="trevyk-static-home__container">
+          <div class="trevyk-static-home__content" aria-busy="true" aria-label="Loading hero content">
+            <div class="trevyk-skeleton-bar trevyk-skeleton-bar--pill" style="height: 0.75rem; width: 11rem"></div>
+            <div class="trevyk-skeleton-title" aria-hidden="true">
+              <div class="trevyk-skeleton-bar"></div>
+              <div class="trevyk-skeleton-bar"></div>
+              <div class="trevyk-skeleton-bar"></div>
+            </div>
+            <div class="trevyk-skeleton-bar" style="height: 1.25rem; width: 13rem; margin-top: 1rem"></div>
+            <div class="trevyk-skeleton-stack" aria-hidden="true">
+              <div class="trevyk-skeleton-bar" style="height: 0.875rem; width: 100%"></div>
+              <div class="trevyk-skeleton-bar" style="height: 0.875rem; width: 88%"></div>
+            </div>
+            <div class="trevyk-skeleton-stack" aria-hidden="true">
+              <div class="trevyk-skeleton-bar" style="height: 0.875rem; width: 100%"></div>
+              <div class="trevyk-skeleton-bar" style="height: 0.875rem; width: 94%"></div>
+              <div class="trevyk-skeleton-bar" style="height: 0.875rem; width: 76%"></div>
+            </div>
+            <div class="trevyk-skeleton-actions" aria-hidden="true">
+              <div class="trevyk-skeleton-bar trevyk-skeleton-bar--pill" style="height: 2.5rem; width: 9rem"></div>
+              <div class="trevyk-skeleton-bar trevyk-skeleton-bar--pill" style="height: 2.5rem; width: 8rem"></div>
+              <div class="trevyk-skeleton-bar trevyk-skeleton-bar--pill" style="height: 2.5rem; width: 7rem"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+    <!-- trevyk-static-home-end -->
     <div id="root">
       <!-- trevyk-static-start -->
       <article class="trevyk-seo-shell">
@@ -189,6 +354,66 @@
       </article>
       <!-- trevyk-static-end -->
     </div>
+    <script>
+      window.__trevykRemoveLcpShell = function () {
+        document.getElementById("trevyk-static-home")?.remove();
+        document.getElementById("trevyk-lcp-shell")?.remove();
+        document.getElementById("trevyk-boot")?.remove();
+        document.body.style.backgroundImage = "";
+        document.body.style.backgroundColor = "";
+        document.documentElement.classList.add("trevyk-app-ready");
+      };
+      function trevykLoadFonts() {
+        if (document.getElementById("trevyk-fonts")) return;
+        var fonts = document.createElement("link");
+        fonts.id = "trevyk-fonts";
+        fonts.rel = "stylesheet";
+        fonts.href =
+          "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Space+Grotesk:wght@500;600;700&display=swap";
+        fonts.media = "print";
+        fonts.onload = function () {
+          this.media = "all";
+        };
+        document.head.appendChild(fonts);
+      }
+      if ("requestIdleCallback" in window) {
+        requestIdleCallback(trevykLoadFonts, { timeout: 4000 });
+      } else {
+        setTimeout(trevykLoadFonts, 150);
+      }
+      function trevykLoadGa() {
+        if (window.__trevykGaLoaded) return;
+        window.__trevykGaLoaded = true;
+        var id = "G-CH828R29RV";
+        var s = document.createElement("script");
+        s.async = true;
+        s.src = "https://www.googletagmanager.com/gtag/js?id=" + id;
+        s.onload = function () {
+          gtag("js", new Date());
+          gtag("config", id, { anonymize_ip: true, send_page_view: false });
+        };
+        document.head.appendChild(s);
+      }
+      ["scroll", "pointerdown"].forEach(function (ev) {
+        window.addEventListener(ev, trevykLoadFonts, { once: true, passive: true });
+      });
+      setTimeout(trevykLoadFonts, 8000);
+      ["scroll", "pointerdown", "keydown"].forEach(function (ev) {
+        window.addEventListener(ev, trevykLoadGa, { once: true, passive: true });
+      });
+      setTimeout(trevykLoadGa, 20000);
+      if ("requestIdleCallback" in window) {
+        requestIdleCallback(function () {
+          if (document.getElementById("trevyk-fonts-mono")) return;
+          var mono = document.createElement("link");
+          mono.id = "trevyk-fonts-mono";
+          mono.rel = "stylesheet";
+          mono.href =
+            "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap";
+          document.head.appendChild(mono);
+        }, { timeout: 14000 });
+      }
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { media } from "../../../config/media";
+import { useIntersectionMediaSrc } from "../../../utils/deferMediaLoad";
 
 type FooterSolarVideoProps = {
   className?: string;
@@ -12,39 +13,31 @@ export function FooterSolarVideo({
 }: FooterSolarVideoProps) {
   const ref = useRef<HTMLVideoElement>(null);
   const [missing, setMissing] = useState(false);
+  const { containerRef, src: videoSrc } = useIntersectionMediaSrc(media.footerSolar, "320px 0px");
 
   useEffect(() => {
     const v = ref.current;
-    if (!v || missing) return;
+    if (!v || missing || !videoSrc) return;
 
     const play = () => {
       v.muted = true;
       v.play().catch(() => {});
     };
     play();
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) play();
-      },
-      { threshold: 0.05 },
-    );
-    io.observe(v);
-    return () => io.disconnect();
-  }, [missing]);
+  }, [missing, videoSrc]);
 
   return (
-    <div className={`overflow-hidden ${className}`}>
+    <div ref={containerRef} className={`overflow-hidden ${className}`}>
       {!missing ? (
         <video
           ref={ref}
           className="h-full w-full object-cover object-center"
-          src={media.footerSolar}
+          src={videoSrc}
           muted
-          autoPlay
+          autoPlay={Boolean(videoSrc)}
           loop
           playsInline
-          preload="auto"
+          preload="none"
           aria-hidden
           onLoadedData={() => ref.current?.play().catch(() => {})}
           onError={() => setMissing(true)}

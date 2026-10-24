@@ -7,3 +7,9 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+interface Window {
+  __trevykRemoveLcpShell?: () => void;
+  __trevykGaLoaded?: boolean;
+  __trevykStaticHeroReady?: boolean;
+}

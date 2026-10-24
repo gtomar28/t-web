@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect, useRef, Suspense, lazy } from 'react';
 import { BrowserRouter, useLocation } from 'react-router-dom';
-import { AnimatePresence } from 'motion/react';
 import type Lenis from 'lenis';
 
 import { SiteSettings } from './types';
@@ -11,21 +10,26 @@ import { BrandGradientBar } from './components/BrandGradientBar';
 import { WhatsAppFloatingButton } from './components/WhatsAppFloatingButton';
 import { SEOManager } from './components/SEOManager';
 import { Analytics } from './components/Analytics';
-import { PageTransition } from './components/PageTransition';
 import { AppRoutes } from './components/AppRoutes';
 import { RouteLoader } from './components/RouteLoader';
+import { PageSectionSkeleton } from './components/ui/PageSectionSkeleton';
 import { useRouteTransitionOverlay } from './hooks/useRouteTransitionOverlay';
 import { trackChatOpen } from './utils/analytics';
 import { setRouteOverlayPathname } from './utils/routeTransitionOverlay';
-import { dismissTrevykBoot } from './utils/heroVideoPreload';
 import { soundEngine } from './utils/audioEngine';
 import { isOurProductsPath, isWhoWeArePath } from './config/site';
 import { initSmoothScroll } from './utils/initSmoothScroll';
 import { prefetchCommonRoutesIdle } from './utils/routePrefetch';
+import { scheduleDeferredMediaLoad } from './utils/deferMediaLoad';
 
 const SolarFooterStage = lazy(() =>
   import('./components/plum/sections/SolarFooterStage').then((m) => ({
     default: m.SolarFooterStage,
+  })),
+);
+const NonHomeRouteShell = lazy(() =>
+  import('./components/NonHomeRouteShell').then((m) => ({
+    default: m.NonHomeRouteShell,
   })),
 );
 const ArchitectureModal = lazy(() =>
@@ -74,10 +78,6 @@ function MainAppContent() {
     setRouteOverlayPathname(pathname);
   }, [pathname]);
 
-  useLayoutEffect(() => {
-    if (!overlayVisible) dismissTrevykBoot();
-  }, [overlayVisible]);
-
   const [settings, setSettings] = useState<SiteSettings>({
     reducedMotion: false,
     highQuality3D: true,
@@ -88,10 +88,33 @@ function MainAppContent() {
   const [chatOpen, setChatOpen] = useState(false);
   const [chatInitialPrompt, setChatInitialPrompt] = useState<string | undefined>(undefined);
   const [chatWidgetReady, setChatWidgetReady] = useState(false);
+  const [homeSolarStageReady, setHomeSolarStageReady] = useState(false);
+  const [homeChromeReady, setHomeChromeReady] = useState(false);
   const [selectedCubeIndex, setSelectedCubeIndex] = useState<number | null>(null);
   const [hoveredCube, setHoveredCube] = useState<number | null>(null);
 
   const lenisRef = useRef<Lenis | null>(null);
+
+  useEffect(() => {
+    if (pathname !== "/") {
+      setHomeSolarStageReady(false);
+      setHomeChromeReady(true);
+      return;
+    }
+    setHomeChromeReady(false);
+    const cancelChrome = scheduleDeferredMediaLoad(() => setHomeChromeReady(true), {
+      scrollMinY: 64,
+      idleTimeoutMs: 5000,
+    });
+    const cancelSolar = scheduleDeferredMediaLoad(() => setHomeSolarStageReady(true), {
+      scrollMinY: 480,
+      idleTimeoutMs: 14000,
+    });
+    return () => {
+      cancelChrome();
+      cancelSolar();
+    };
+  }, [pathname]);
 
   const openChatWithPrompt = (prompt?: string) => {
     setChatWidgetReady(true);
@@ -152,7 +175,7 @@ function MainAppContent() {
     };
 
     if (typeof requestIdleCallback !== 'undefined') {
-      const idleId = requestIdleCallback(start, { timeout: 2500 });
+      const idleId = requestIdleCallback(start, { timeout: 5500 });
       return () => {
         cancelled = true;
         cancelIdleCallback(idleId);
@@ -175,7 +198,7 @@ function MainAppContent() {
       setChatWidgetReady(true);
       return;
     }
-    const timeoutId = window.setTimeout(() => setChatWidgetReady(true), 4500);
+    const timeoutId = window.setTimeout(() => setChatWidgetReady(true), 12000);
     return () => window.clearTimeout(timeoutId);
   }, [chatOpen]);
 
@@ -205,13 +228,17 @@ function MainAppContent() {
       <SEOManager />
       <Analytics />
 
-      {!overlayVisible && (
+      {!overlayVisible && (pathname !== "/" || homeChromeReady) && (
         <BrandGradientBar height={5} pinnedTop={true} shimmer={true} />
       )}
 
-      {!overlayVisible && <Cursor reducedMotion={settings.reducedMotion} />}
+      {!overlayVisible && (pathname !== "/" || homeChromeReady) && (
+        <Cursor reducedMotion={settings.reducedMotion} />
+      )}
 
-      <RouteLoader visible={overlayVisible} reducedMotion={settings.reducedMotion} />
+      {overlayVisible ? (
+        <RouteLoader visible reducedMotion={settings.reducedMotion} />
+      ) : null}
 
       <Navbar
         settings={settings}
@@ -224,13 +251,9 @@ function MainAppContent() {
         className={`relative z-10 min-h-screen${overlayVisible ? " pointer-events-none" : ""}`}
         aria-busy={overlayVisible}
       >
-        <AnimatePresence mode="sync">
-          <PageTransition
-            key={pathname}
-            pathname={pathname}
-            reducedMotion={settings.reducedMotion}
-          >
-            <Suspense fallback={null}>
+        {pathname === "/" ? (
+          <div className="relative">
+            <Suspense fallback={<PageSectionSkeleton />}>
               <AppRoutes
                 location={location}
                 settings={settings}
@@ -239,16 +262,32 @@ function MainAppContent() {
                 onCubeHover={setHoveredCube}
               />
             </Suspense>
-          </PageTransition>
-        </AnimatePresence>
+          </div>
+        ) : (
+          <Suspense fallback={<PageSectionSkeleton />}>
+            <NonHomeRouteShell
+              pathname={pathname}
+              reducedMotion={settings.reducedMotion}
+              location={location}
+              settings={settings}
+              onOpenArchitectureModal={handleOpenArchitectureModal}
+              hoveredCube={hoveredCube}
+              onCubeHover={setHoveredCube}
+            />
+          </Suspense>
+        )}
       </main>
 
       {/* 7. Plum footer — “Next project” band hidden on contact & who-we-are */}
       {pathname === "/" ? (
         <div className="relative z-[35]">
-          <Suspense fallback={null}>
-            <SolarFooterStage />
-          </Suspense>
+          {homeSolarStageReady ? (
+            <Suspense fallback={null}>
+              <SolarFooterStage />
+            </Suspense>
+          ) : (
+            <SiteFooter showSolarVideo={false} hideNextProjectCta={hideFooterNextProject} />
+          )}
         </div>
       ) : (
         <div className="relative z-[35]">
@@ -274,7 +313,7 @@ function MainAppContent() {
         </Suspense>
       ) : null}
 
-      <WhatsAppFloatingButton />
+      {(pathname !== "/" || homeChromeReady) && <WhatsAppFloatingButton />}
 
       {chatWidgetReady ? (
         <Suspense fallback={null}>

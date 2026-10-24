@@ -23,7 +23,12 @@ export function getGaMeasurementId() {
 /** Inject GA4 once (safe to call repeatedly). */
 export function initAnalytics() {
   if (!GA_ID || typeof document === "undefined") return;
-  if (document.getElementById("ga4-gtag")) return;
+  if (
+    document.getElementById("ga4-gtag") ||
+    document.querySelector('script[src*="googletagmanager.com/gtag/js"]')
+  ) {
+    return;
+  }
 
   window.dataLayer = window.dataLayer || [];
   window.gtag =
@@ -49,10 +54,11 @@ export function trackPageView(pathname: string) {
   if (!isAnalyticsEnabled()) return;
   initAnalytics();
   if (!window.gtag) return;
+  const pagePath = pathname?.startsWith("/") ? pathname : `/${pathname || ""}`.replace(/^\/\//, "/");
   window.gtag("event", "page_view", {
-    page_path: pathname,
+    page_path: pagePath || "/",
     page_location: window.location.href,
-    page_title: document.title,
+    page_title: document.title || "Trevyk Technologies",
   });
 }
 

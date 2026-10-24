@@ -249,7 +249,7 @@
       rgba(22, 10, 28, 0.45) 88%,
       rgba(22, 10, 28, 0.78) 100%
     ),
-    url("/Futuristic%20Purple%20Wave%20Background.png");
+    url("/images/futuristic-purple-wave-1920.jpg");
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -310,27 +310,35 @@
   background-size: 32px 32px, 32px 32px, 100% 100%, 100% 100%, 100% 100%;
 }
 
-/* Growth offer — card image wells: mid plum (section band stays dark) */
+/* Growth offer — card wells: Technology deep dive purple (#6B4A87 → #8558A5) */
 .growth-card-photo {
   background: linear-gradient(
-    165deg,
-    color-mix(in srgb, var(--plum-lavender) 72%, #5c4658) 0%,
-    color-mix(in srgb, var(--plum-secondary) 85%, #4a3848) 48%,
-    color-mix(in srgb, var(--plum-primary) 55%, #3d2e3a) 100%
+    155deg,
+    #6b4a87 0%,
+    #5c4080 42%,
+    #4a3358 100%
   );
 }
 
 .growth-card-photo__img {
-  filter: brightness(1.04) contrast(1.02) saturate(0.9);
+  filter: brightness(0.82) contrast(1.1) saturate(1.12) hue-rotate(-6deg);
 }
 
 .growth-card-photo__edge {
-  background: linear-gradient(
-    to top,
-    color-mix(in srgb, #1a0f18 28%, transparent),
-    color-mix(in srgb, var(--plum-secondary) 8%, transparent) 35%,
-    transparent 55%
-  );
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, #6b4a87 52%, transparent) 0%,
+      color-mix(in srgb, #8558a5 28%, transparent) 42%,
+      transparent 68%
+    ),
+    linear-gradient(
+      to top,
+      color-mix(in srgb, #1a0f18 42%, transparent),
+      color-mix(in srgb, #6b4a87 18%, transparent) 38%,
+      transparent 58%
+    );
+  mix-blend-mode: multiply;
 }
 
 /* Min height = one screen; content can grow; no vertical centering by default. */

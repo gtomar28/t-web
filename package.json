@@ -8,7 +8,9 @@
   },
   "scripts": {
     "dev": "tsx server.ts",
-    "build:site": "node scripts/bundle-api.mjs && vite build && tsx scripts/prerender-html.ts",
+    "dev:reset": "rm -rf node_modules/.vite .vite && tsx server.ts",
+    "sync:static-home": "node scripts/sync-static-home-html.mjs",
+    "build:site": "node scripts/bundle-api.mjs && node scripts/update-sitemap-lastmod.mjs && node scripts/sync-static-home-html.mjs && vite build && tsx scripts/prerender-html.ts && node scripts/optimize-html-output.mjs",
     "build": "npm run build:site && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
     "start": "node dist/server.cjs",
     "preview": "vite preview",

@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { lerp } from "../../../lib/motion";
+import { HeroPosterPicture } from "../../media/HeroPosterPicture";
+import { media } from "../../../config/media";
+import { scheduleDeferredMediaLoad } from "../../../utils/deferMediaLoad";
+import { markReactHeroPosterReady } from "../../../utils/heroVideoPreload";
 
 type ScrollScrubVideoProps = {
   src: string;
@@ -19,6 +23,9 @@ type ScrollScrubVideoProps = {
   staticLcpSrcSet?: string;
   staticLcpSizes?: string;
   label?: string;
+  onPosterReady?: () => void;
+  /** When set with `staticLcpPoster`, MP4 loads after scroll / interaction / idle — not on first paint. */
+  deferVideoLoad?: boolean;
 };
 
 export function ScrollScrubVideo({
@@ -37,11 +44,27 @@ export function ScrollScrubVideo({
   staticLcpSrcSet,
   staticLcpSizes = "100vw",
   label = "Section animation",
+  onPosterReady,
+  deferVideoLoad = false,
 }: ScrollScrubVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [ready, setReady] = useState(false);
   const [videoVisible, setVideoVisible] = useState(false);
   const [missing, setMissing] = useState(false);
+  const [videoSrc, setVideoSrc] = useState<string | undefined>(
+    deferVideoLoad && staticLcpPoster ? undefined : src,
+  );
+
+  useEffect(() => {
+    if (!deferVideoLoad || !staticLcpPoster) {
+      setVideoSrc(src);
+      return;
+    }
+    return scheduleDeferredMediaLoad(() => setVideoSrc(src), {
+      scrollMinY: 48,
+      idleTimeoutMs: 8000,
+    });
+  }, [deferVideoLoad, staticLcpPoster, src]);
 
   const scale = zoom ?? lerp(zoomMin, zoomMax, progress);
   const useStaticLcp = Boolean(staticLcpPoster);
@@ -63,7 +86,7 @@ export function ScrollScrubVideo({
   }, [progress, syncTime, ready]);
 
   useEffect(() => {
-    if (!loop || !videoRef.current || missing) return;
+    if (!loop || !videoRef.current || missing || !videoSrc) return;
     const v = videoRef.current;
     let raf2 = 0;
     const raf1 = requestAnimationFrame(() => {
@@ -76,7 +99,7 @@ export function ScrollScrubVideo({
       cancelAnimationFrame(raf2);
       v.pause();
     };
-  }, [loop, ready, missing]);
+  }, [loop, ready, missing, videoSrc]);
 
   return (
     <div className={`overflow-hidden ${className || "relative h-full w-full"}`}>
@@ -89,19 +112,21 @@ export function ScrollScrubVideo({
           }}
         >
           {useStaticLcp ? (
-            <img
-              src={staticLcpPoster}
-              srcSet={staticLcpSrcSet}
-              sizes={staticLcpSizes}
-              alt=""
-              decoding="async"
-              loading="eager"
-              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
+            <HeroPosterPicture
+              className={`absolute inset-0 transition-opacity duration-700 ${
                 videoVisible ? "opacity-0" : "opacity-100"
               }`}
               style={{ objectPosition }}
-              // @ts-expect-error fetchPriority on img
-              fetchPriority="high"
+              sizes={staticLcpSizes}
+              posterJpg={staticLcpPoster ?? media.heroOfficePoster}
+              posterJpg640={media.heroOfficePoster640}
+              posterWebp={media.heroOfficePosterWebp}
+              posterWebp640={media.heroOfficePoster640Webp}
+              objectPosition={objectPosition}
+              onLoad={() => {
+                markReactHeroPosterReady();
+                onPosterReady?.();
+              }}
             />
           ) : null}
           <video
@@ -110,11 +135,11 @@ export function ScrollScrubVideo({
               useStaticLcp && !videoVisible ? "opacity-0" : "opacity-100"
             }`}
             style={{ objectPosition }}
-            src={src}
+            src={videoSrc}
             poster={useStaticLcp ? undefined : poster}
             muted
             playsInline
-            preload={scrub ? "auto" : "metadata"}
+            preload={videoSrc ? (scrub ? "auto" : "metadata") : "none"}
             loop={loop}
             aria-label={label}
             onLoadedMetadata={() => {

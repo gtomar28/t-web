@@ -40,13 +40,24 @@ function LayerDetailCardInner({
   emphasized: boolean;
 }) {
   return (
-    <div
-      className={`relative z-20 rounded-2xl border bg-[#1E1024]/82 p-4 shadow-[inset_0_1px_0_rgba(248,246,251,0.28),0_16px_40px_rgba(0,0,0,0.35)] backdrop-blur-2xl ring-1 transition-all duration-300 sm:p-5 ${
-        emphasized
-          ? "border-[#F8F6FB]/35 ring-[#B9A6D1]/35"
-          : "border-[#F8F6FB]/18 ring-[#B9A6D1]/10"
-      }`}
-    >
+    <div className="relative z-20">
+      <div
+        className={`pointer-events-none absolute -inset-1 rounded-[1.15rem] transition-opacity duration-300 ${
+          emphasized ? "opacity-100" : "opacity-0"
+        }`}
+        aria-hidden
+        style={{
+          background: `radial-gradient(ellipse 80% 65% at 22% 18%, ${layer.accent}55, transparent 62%), radial-gradient(ellipse 55% 45% at 85% 75%, rgba(107,74,135,0.4), transparent 68%)`,
+          filter: "blur(12px)",
+        }}
+      />
+      <div
+        className={`relative rounded-2xl border bg-[#1E1024]/82 p-4 shadow-[inset_0_1px_0_rgba(248,246,251,0.28),0_16px_40px_rgba(0,0,0,0.35)] backdrop-blur-2xl ring-1 transition-all duration-300 sm:p-5 ${
+          emphasized
+            ? "border-[#F8F6FB]/45 ring-[#E8A9C2]/40 shadow-[inset_0_1px_0_rgba(248,246,251,0.32),0_0_32px_rgba(232,169,194,0.28),0_0_56px_rgba(107,74,135,0.22),0_16px_40px_rgba(0,0,0,0.35)]"
+            : "border-[#F8F6FB]/18 ring-[#B9A6D1]/10"
+        }`}
+      >
       <div className="flex items-start gap-2.5">
         <span
           className="mt-1 h-2 w-2 shrink-0 rounded-full transition-[box-shadow] duration-300"
@@ -77,6 +88,7 @@ function LayerDetailCardInner({
           </span>
         ))}
       </div>
+      </div>
     </div>
   );
 }
@@ -93,26 +105,37 @@ function MeasuredCircuitConnector({
   if (!route) return null;
 
   const stroke = active ? layer.accent : "#B9A6D1";
-  const opacity = active ? 0.88 : 0.38;
+  const opacity = active ? 1 : 0.38;
 
   return (
     <g className="transition-opacity duration-300">
       {active ? (
-        <path
-          d={route.d}
-          fill="none"
-          stroke={stroke}
-          strokeWidth={5}
-          strokeOpacity={0.22}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
+        <>
+          <path
+            d={route.d}
+            fill="none"
+            stroke={stroke}
+            strokeWidth={10}
+            strokeOpacity={0.35}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d={route.d}
+            fill="none"
+            stroke={stroke}
+            strokeWidth={5}
+            strokeOpacity={0.45}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </>
       ) : null}
       <path
         d={route.d}
         fill="none"
         stroke={stroke}
-        strokeWidth={active ? 2 : 1.5}
+        strokeWidth={active ? 2.25 : 1.5}
         strokeOpacity={opacity}
         strokeLinecap="round"
         strokeLinejoin="round"

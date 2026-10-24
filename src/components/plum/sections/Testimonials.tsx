@@ -68,7 +68,7 @@ export function Testimonials({ overSolar = false }: TestimonialsProps) {
                   <Avatar name={t.name} />
                   <span>
                     <span className="block text-sm font-medium text-plum-neutral">{t.name}</span>
-                    <span className="text-xs text-plum-secondary">{t.region}</span>
+                    <span className="text-xs text-plum-lavender">{t.region}</span>
                   </span>
                 </button>
               </li>
@@ -82,7 +82,7 @@ export function Testimonials({ overSolar = false }: TestimonialsProps) {
                 "radial-gradient(ellipse 80% 60% at 100% 0%, color-mix(in srgb, #85627E 45%, transparent), transparent 55%), linear-gradient(160deg, #251422, #1a0f18)",
             }}
           >
-            <span className="font-mono text-xs text-plum-secondary">
+            <span className="font-mono text-xs text-plum-lavender">
               {String(active + 1).padStart(2, "0")} /{" "}
               {String(testimonialsSection.items.length).padStart(2, "0")}
             </span>
@@ -94,7 +94,7 @@ export function Testimonials({ overSolar = false }: TestimonialsProps) {
                 <Avatar name={item.name} />
                 <div>
                   <cite className="not-italic font-medium text-plum-neutral">{item.name}</cite>
-                  <p className="text-sm text-plum-secondary">{item.region}</p>
+                  <p className="text-sm text-plum-lavender">{item.region}</p>
                 </div>
               </div>
             </figcaption>

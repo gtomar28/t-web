@@ -5,18 +5,15 @@ import {
   dismissTrevykBoot,
   markHomeHeroVideoWarm,
 } from "./heroVideoPreload";
-import { isHomePath, shouldGateHomeEntry } from "./homeEntryGate";
+import { isHomePath } from "./homeEntryGate";
 
 export const ROUTE_LOADER_ID = "trevyk-route-loader";
 
 type Listener = (visible: boolean) => void;
 
-const skipInitialOverlay =
-  typeof window !== "undefined" &&
-  !shouldGateHomeEntry(window.location.pathname);
-
-let visible = !skipInitialOverlay;
-let contentReady = skipInitialOverlay;
+/** First document paint must not sit under the route loader (was 95%+ LCP render delay). */
+let visible = false;
+let contentReady = true;
 let shownAt = Date.now();
 let activePathname = "/";
 const listeners = new Set<Listener>();

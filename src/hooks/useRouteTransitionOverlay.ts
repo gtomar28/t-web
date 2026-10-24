@@ -1,7 +1,4 @@
 import { useLayoutEffect, useEffect, useRef, useSyncExternalStore } from "react";
-import { ensureHeroVideoPreload } from "../utils/heroVideoPreload";
-import { media } from "../config/media";
-import { isHomePath } from "../utils/homeEntryGate";
 import {
   isRouteOverlayVisible,
   markRouteContentReadyForPath,
@@ -19,16 +16,10 @@ export function useRouteTransitionOverlay(pathname: string) {
   const overlayVisible = useSyncExternalStore(
     subscribeRouteOverlay,
     isRouteOverlayVisible,
-    () => true,
+    () => false,
   );
 
   const pathnameRef = useRef(pathname);
-
-  useEffect(() => {
-    if (isHomePath(pathname)) {
-      ensureHeroVideoPreload(media.heroOffice);
-    }
-  }, [pathname]);
 
   useLayoutEffect(() => {
     setRouteOverlayPathname(pathname);

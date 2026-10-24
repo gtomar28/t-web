@@ -164,7 +164,10 @@ export function SiteFooter({
               </p>
               <p className="mt-5 text-sm leading-relaxed text-plum-lavender">
                 Flagship product:{" "}
-                <PlumLink href={brand.flagshipLink.href} className="text-plum-neutral hover:text-plum-accent">
+                <PlumLink
+                  href={brand.flagshipLink.href}
+                  className="font-medium text-plum-neutral underline decoration-plum-neutral/55 underline-offset-[3px] hover:text-plum-accent hover:decoration-plum-accent"
+                >
                   {brand.flagshipLink.label}
                 </PlumLink>{" "}
                 {brand.flagshipTail}

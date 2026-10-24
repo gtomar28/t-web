@@ -17,6 +17,8 @@ interface TrevykLogoProps {
   className?: string;
   /** Custom size in pixels for the icon alone */
   iconSize?: number;
+  /** Keep false on navbar — high priority steals LCP from the hero poster. */
+  priority?: boolean;
 }
 
 const LOGO_ON_LIGHT = '/trevyk-logo.png';
@@ -51,7 +53,10 @@ export const TrevykLogo: React.FC<TrevykLogoProps> = ({
   showTagline = false,
   className = '',
   iconSize,
+  priority = false,
 }) => {
+  const imgLoading = priority ? 'eager' : 'lazy';
+  const imgFetchPriority = priority ? ('high' as const) : ('low' as const);
   const onDark = theme !== 'light';
   const logoSrc = onDark ? LOGO_ON_DARK : LOGO_ON_LIGHT;
   const iconSrc = onDark ? ICON_ON_DARK : ICON_ON_LIGHT;
@@ -71,8 +76,8 @@ export const TrevykLogo: React.FC<TrevykLogoProps> = ({
           className="shrink-0 object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_0_12px_rgba(185,166,209,0.35)]"
           draggable={false}
           decoding="async"
-          loading="eager"
-          fetchPriority="high"
+          loading={imgLoading}
+          fetchPriority={imgFetchPriority}
         />
       </div>
     );
@@ -140,8 +145,8 @@ export const TrevykLogo: React.FC<TrevykLogoProps> = ({
         className="object-contain object-left transition-opacity duration-300 group-hover:opacity-95 drop-shadow-[0_0_18px_rgba(185,166,209,0.25)]"
         draggable={false}
         decoding="async"
-        loading="eager"
-        fetchPriority="high"
+        loading={imgLoading}
+        fetchPriority={imgFetchPriority}
       />
       {showTagline && (
         <span className={`text-[10px] sm:text-[11px] font-sans font-medium leading-tight mt-1 hidden sm:block ${taglineClass}`}>
